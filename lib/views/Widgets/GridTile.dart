@@ -1,11 +1,8 @@
 import 'package:ent5m/constants/Colors.dart';
 import 'package:flutter/material.dart';
 
-
 class MyGridTile extends StatelessWidget {
-  const MyGridTile(
-      {Key? key,required this.icon, required this.onTap})
-      : super(key: key);
+  const MyGridTile({Key? key, required this.icon, required this.onTap}) : super(key: key);
 
   final IconData icon;
   final VoidCallback onTap;
@@ -24,22 +21,25 @@ class MyGridTile extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.green.shade900,
           onTap: onTap,
-          borderRadius: BorderRadius.circular(20),  // Match the border radius
+          borderRadius: BorderRadius.circular(20), // Match the border radius
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                  height: 70,
-                  width: 70,
-                  child: Icon(icon,size: 45,)),
-              const SizedBox(height: 20,)
-
+                  // height: 20,
+                  // width: 70,
+                  child: Icon(
+                icon,
+                size: 30,
+              )),
+              const SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),
       ),
     );
-
   }
 }
