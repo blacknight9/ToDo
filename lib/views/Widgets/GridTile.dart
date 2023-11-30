@@ -19,7 +19,7 @@ class MyGridTile extends StatelessWidget {
           border: Border.all(color: Colors.grey, width: 0.2),
         ),
         child: InkWell(
-          splashColor: Colors.green.shade900,
+          splashColor: myHomeIcons,
           onTap: onTap,
           borderRadius: BorderRadius.circular(20), // Match the border radius
 
@@ -31,6 +31,7 @@ class MyGridTile extends StatelessWidget {
                   // width: 70,
                   child: Icon(
                 icon,
+                color: myHomeIcons,
                 size: 30,
               )),
               const SizedBox(

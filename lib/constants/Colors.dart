@@ -16,4 +16,9 @@ const searchBarColor = Color.fromRGBO(50, 55, 57, 1);
 const dividerColor = Color.fromRGBO(37, 45, 50, 1);
 const myPrimary2 = Color.fromRGBO(30, 36, 40, 1);
 const myPrimary = Color.fromRGBO(202, 207, 198, 1.0);
-const myPrimaryAccent = Color.fromRGBO(123, 69, 69, 1.0);
+const myPrimaryAccent = Color.fromRGBO(214, 221, 210, 1);
+const myNoteTileColor = Color.fromRGBO(118, 140, 112, 1);
+const myAppBar = Color.fromRGBO(74, 99, 86, 1);
+const myHomeIcons = Color.fromRGBO(39, 57, 46, 1);
+
+

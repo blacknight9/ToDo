@@ -1,3 +1,4 @@
+import 'package:ent5m/views/NotesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../views/CalculatorsPage/CalculatorsPage.dart';
@@ -9,6 +10,14 @@ import '../views/TodoPage/TodoPage.dart';
 import 'TileModel.dart';
 
 List homeList = [
+  TileModel(
+      icon: Icons.note_add_sharp,
+      title: 'NOTES',
+
+      // });
+      onTap: () {
+        Get.to(() => const NotesPage(), transition: Transition.downToUp);
+      }),
   TileModel(
       icon: Icons.today_outlined,
       title: 'TO DO',
@@ -55,12 +64,5 @@ List homeList = [
       onTap: () {
         Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
       }),
-  TileModel(
-      icon: Icons.calculate,
-      title: 'CALCULATORS',
 
-      // });
-      onTap: () {
-        Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
-      }),
 ];

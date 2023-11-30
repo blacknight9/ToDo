@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
           scaffoldBackgroundColor: myPrimary,
-          appBarTheme: AppBarTheme(backgroundColor: Colors.green.shade900, foregroundColor: Colors.grey.shade100)),
+          appBarTheme: AppBarTheme(backgroundColor: myHomeIcons, foregroundColor: Colors.grey.shade100)),
       debugShowCheckedModeBanner: false,
-      home: const ResponsiveMaxWidthContainer(maxWidthPercentage: 0.75, child: HomePage()),
+      home: HomePage(),
     );
   }
 }
