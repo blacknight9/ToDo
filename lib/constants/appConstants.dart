@@ -23,7 +23,7 @@ String? getRandomId(int? length) {
   var values = List<int>.generate(length!, (index) => random.nextInt(255));
   return base64UrlEncode(values);
 }
-final format = intl.DateFormat.yMMMd();
+final format = intl.DateFormat.yMMMMEEEEd();
 final format2 = intl.DateFormat.jm();
 
 bool isRTL(String text) {

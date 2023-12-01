@@ -11,20 +11,6 @@ import 'TileModel.dart';
 
 List homeList = [
   TileModel(
-      icon: Icons.note_add_sharp,
-      title: 'NOTES',
-
-      // });
-      onTap: () {
-        Get.to(() => const NotesPage(), transition: Transition.downToUp);
-      }),
-  TileModel(
-      icon: Icons.today_outlined,
-      title: 'TO DO',
-      onTap: () async {
-        Get.to(() => const TodoPage(), transition: Transition.downToUp);
-      }),
-  TileModel(
       icon: Icons.car_rental,
       title: 'FLEET',
       onTap: () async {
@@ -37,7 +23,7 @@ List homeList = [
         Get.to(() => const StaffPage(), transition: Transition.downToUp);
       }),
   TileModel(
-      icon: Icons.list_alt,
+      icon: Icons.list_alt_rounded,
       title: 'SHOPS LIST',
       onTap: () async {
         Get.to(() => const ShopsPage(), transition: Transition.downToUp);
@@ -57,8 +43,8 @@ List homeList = [
         Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
       }),
   TileModel(
-      icon: Icons.calculate,
-      title: 'Gas recites',
+      icon: Icons.monetization_on,
+      title: 'GAS RECEIPTS',
 
       // });
       onTap: () {
