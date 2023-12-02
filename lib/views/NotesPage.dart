@@ -17,63 +17,66 @@ class NotesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('notes')
-          .orderBy('timeStamp', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('');
-        }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Get.bottomSheet(AddNotePage());
-                },
-                icon: const Icon(
-                  Icons.add_circle,
-                  size: 60,
-                ),
-                color: appBarColor,
-              ),
-              const SizedBox(height: 20),
-              const Text('Add note'),
-            ],
-          );
-        }
-
-        // Separate pinned and unpinned notes
-        List<DocumentSnapshot> pinnedNotes = [];
-        List<DocumentSnapshot> unpinnedNotes = [];
-        for (var doc in snapshot.data!.docs) {
-          if (doc['isPinned'] == true && pinnedNotes.isEmpty) {
-            pinnedNotes.add(doc);
-          } else {
-            unpinnedNotes.add(doc);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('notes')
+            .orderBy('timeStamp', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
           }
-        }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('');
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Get.bottomSheet(AddNotePage());
+                  },
+                  icon: const Icon(
+                    Icons.add_circle,
+                    size: 60,
+                  ),
+                  color: appBarColor,
+                ),
+                const SizedBox(height: 20),
+                const Text('Add note'),
+              ],
+            );
+          }
 
-        // Combine them with pinned notes first
-        List<DocumentSnapshot> combinedNotes = [...pinnedNotes, ...unpinnedNotes];
+          // Separate pinned and unpinned notes
+          List<DocumentSnapshot> pinnedNotes = [];
+          List<DocumentSnapshot> unpinnedNotes = [];
+          for (var doc in snapshot.data!.docs) {
+            if (doc['isPinned'] == true && pinnedNotes.isEmpty) {
+              pinnedNotes.add(doc);
+            } else {
+              unpinnedNotes.add(doc);
+            }
+          }
 
-        return ResponsiveMaxWidthContainer(
-          child: ListView.builder(
-            itemCount: combinedNotes.length,
-            itemBuilder: (context, index) {
-              var data = combinedNotes[index];
-              HomePanelModel homePanelModel = HomePanelModel.fromJson(data.data() as Map<String, dynamic>);
-              return MyExpansionTile(homePanelModel: homePanelModel);
-            },
-          ),
-        );
-      },
+          // Combine them with pinned notes first
+          List<DocumentSnapshot> combinedNotes = [...pinnedNotes, ...unpinnedNotes];
+
+          return ResponsiveMaxWidthContainer(
+            child: ListView.builder(
+              itemCount: combinedNotes.length,
+              itemBuilder: (context, index) {
+                var data = combinedNotes[index];
+                HomePanelModel homePanelModel = HomePanelModel.fromJson(data.data() as Map<String, dynamic>);
+                return MyExpansionTile(homePanelModel: homePanelModel);
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

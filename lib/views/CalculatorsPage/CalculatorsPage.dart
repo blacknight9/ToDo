@@ -1,4 +1,6 @@
+import 'package:ent5m/views/CalculatorsPage/MaxRateCalculator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CalculatorsPage extends StatelessWidget {
   const CalculatorsPage({super.key});
@@ -8,6 +10,9 @@ class CalculatorsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('CALCULATORS'),
+        actions: [
+          IconButton(onPressed: ()=>Get.to(()=>const MaxRateCalculator()), icon: Icon(Icons.calculate))
+        ],
       ),
     );
   }

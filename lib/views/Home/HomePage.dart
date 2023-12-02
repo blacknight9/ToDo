@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
 
                 SizedBox(
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: AddNotePage()),isScrollControlled: true, isDismissible: false);
+                child: AddNotePage()), isDismissible: false);
           }, icon: const Icon(Icons.note_add)),
           IconButton(onPressed: (){
             Get.bottomSheet(const MenuPage());

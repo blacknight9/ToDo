@@ -5,6 +5,7 @@ import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/HomePanelModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -54,9 +55,9 @@ class HomeController extends GetxController {
         'sqi': int.parse(sqiController.text),
 
       });
-      // Get.snackbar('Success', 'Data updated successfully');
+      Fluttertoast.showToast(msg:'Success, Data updated successfully',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
     } catch (e) {
-      // Get.snackbar('Error', 'Failed to update data');
+      Fluttertoast.showToast(msg:'Error, Failed to update data',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
       print(e);
     }
   }
@@ -80,36 +81,42 @@ class HomeController extends GetxController {
       CollectionReference notes = FirebaseFirestore.instance.collection('notes');
 
       // If the new note is pinned, unpin all other notes first
-      if (isPinned.value == true) {
-        // Get all pinned notes
-        QuerySnapshot querySnapshot = await notes.where('isPinned', isEqualTo: true).get();
+      if(message.value.isEmpty || title.value.isEmpty) {
+        Fluttertoast.showToast(msg: 'Fields can\'t be empty',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
+        return;
+      }
+      else {
+        if (isPinned.value == true) {
+          // Get all pinned notes
+          QuerySnapshot querySnapshot = await notes.where('isPinned', isEqualTo: true).get();
 
-        // Iterate and update each pinned note to be unpinned
-        for (var doc in querySnapshot.docs) {
-          await notes.doc(doc.id).update({'isPinned': false});
+          // Iterate and update each pinned note to be unpinned
+          for (var doc in querySnapshot.docs) {
+            await notes.doc(doc.id).update({'isPinned': false});
+          }
         }
+
+        // Add the new note
+        await notes.add(HomePanelModel(
+            title: title.value,
+            message: message.value,
+            isPinned: isPinned.value,
+            timeStamp: DateTime.now().toUtc(),
+            dp: randomImage,
+            type: 'note',
+            userName: 'userName')
+            .toJson());
+
+        // Reset fields after saving
+        title.value = '';
+        message.value = '';
+        isPinned.value = false;
+        Get.back();
       }
 
-      // Add the new note
-      await notes.add(HomePanelModel(
-          title: title.value,
-          message: message.value,
-          isPinned: isPinned.value,
-          timeStamp: DateTime.now().toUtc(),
-          dp: randomImage,
-          type: 'note',
-          userName: 'userName')
-          .toJson());
-
-      // Reset fields after saving
-      title.value = '';
-      message.value = '';
-      isPinned.value = false;
     } catch (e) {
       print(e);
     }
   }
-
-
 
 }

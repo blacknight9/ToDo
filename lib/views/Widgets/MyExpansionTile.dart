@@ -13,7 +13,7 @@ class MyExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(1.0),
+      padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(

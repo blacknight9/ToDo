@@ -20,56 +20,63 @@ class UpdateHomePanelPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Update Home Panel'),
+        title: const Text('Update Home Panel'),
+        leading: IconButton(
+          onPressed: ()=> Get.back(), icon: const Icon(Icons.clear),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: homeController.csController,
-              decoration: const InputDecoration(labelText: 'COMPLETELY SATISFIED'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: homeController.soController,
-              decoration: const InputDecoration(labelText: 'SHOUT-OUTS'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: homeController.sqiController,
-              decoration: const InputDecoration(labelText: 'SQI'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: homeController.hotAlertController,
-              decoration: const InputDecoration(labelText: 'HOT ALERT'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: homeController.addRevController,
-              decoration: const InputDecoration(labelText: 'AD-REV'),
-              keyboardType: TextInputType.number,
-            ),
-            // ... Other text fields with their respective controllers ...
-            SwitchListTile(
-              title: Text('Is SO'),
-              value: homeController.isSo.value,
-              onChanged: (bool value) => homeController.isSo.value = value,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Update the HomeController values
-                homeController.so.value = int.tryParse(homeController.soController.text) ?? 0;
-                // ... Update other HomeController values similarly ...
-
-                // Call the method to update Firestore
-                homeController.updateHomePanelData();
-              },
-              child: const Text('Update Data'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: homeController.csController,
+                decoration: const InputDecoration(labelText: 'COMPLETELY SATISFIED'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: homeController.soController,
+                decoration: const InputDecoration(labelText: 'SHOUT-OUTS'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: homeController.sqiController,
+                decoration: const InputDecoration(labelText: 'SQI'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: homeController.hotAlertController,
+                decoration: const InputDecoration(labelText: 'HOT ALERT'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: homeController.addRevController,
+                decoration: const InputDecoration(labelText: 'AD-REV'),
+                keyboardType: TextInputType.number,
+              ),
+              // ... Other text fields with their respective controllers ...
+              SwitchListTile(
+                title: Text('Is SO'),
+                value: homeController.isSo.value,
+                onChanged: (bool value) => homeController.isSo.value = value,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Update the HomeController values
+                  homeController.so.value = int.tryParse(homeController.soController.text) ?? 0;
+                  // ... Update other HomeController values similarly ...
+          
+                  // Call the method to update Firestore
+                  homeController.updateHomePanelData();
+                  Get.back();
+                },
+                child: const Text('Update Data'),
+              ),
+            ],
+          ),
         ),
       ),
     );

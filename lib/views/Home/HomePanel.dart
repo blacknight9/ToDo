@@ -25,14 +25,14 @@ class HomePanel extends StatelessWidget {
       child: ResponsiveMaxWidthContainer(
         child: GestureDetector(
           onTap: () {
-            Get.bottomSheet( UpdateHomePanelPage());
+            Get.bottomSheet( UpdateHomePanelPage(),isDismissible: false);
           },
           child: Obx(
             () => Container(
               decoration: BoxDecoration(
                   color: myPrimary,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.grey, width: 0.2)),
+                  border: Border.all(color: myAppBar, width: 1)),
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
