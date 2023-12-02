@@ -70,8 +70,34 @@ class NotesPage extends StatelessWidget {
               itemCount: combinedNotes.length,
               itemBuilder: (context, index) {
                 var data = combinedNotes[index];
+                var data2 = snapshot.data!.docs[index];
+                print(data['type']);
                 HomePanelModel homePanelModel = HomePanelModel.fromJson(data.data() as Map<String, dynamic>);
-                return MyExpansionTile(homePanelModel: homePanelModel);
+                return
+                  homePanelModel.type == 'contact' ?
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Ink(
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15)
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                              leading: CircleAvatar(backgroundImage: NetworkImage(randomImage),),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              tileColor: Colors.blueGrey,
+                              title: Text(homePanelModel.name!),
+                              subtitle: Text(homePanelModel.desc!),
+                              trailing: TextButton(onPressed: ()=>makePhoneCall(homePanelModel.phoneNumber!), child: Text(formatPhoneNumber(homePanelModel.phoneNumber!))),
+                            ),
+                          ),
+                        ),
+                      ) :
+
+                  MyExpansionTile(homePanelModel: homePanelModel);
               },
             ),
           );

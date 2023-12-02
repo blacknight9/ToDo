@@ -1,20 +1,21 @@
+import 'package:ent5m/views/FleetPage/PackersPage.dart';
 import 'package:ent5m/views/NotesPage.dart';
+import 'package:ent5m/views/PickedUpCars/PickedUpCarsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../views/CalculatorsPage/CalculatorsPage.dart';
-import '../views/ContactsPage/ContacsPage.dart';
+import '../views/ContactsPage/ContactsPage.dart';
 import '../views/FleetPage/FleetPage.dart';
 import '../views/ShopsListPage/ShopsListPage.dart';
 import '../views/StaffPage/StaffPage.dart';
-import '../views/TodoPage/TodoPage.dart';
 import 'TileModel.dart';
 
 List homeList = [
   TileModel(
       icon: Icons.car_rental,
-      title: 'FLEET',
+      title: 'VANS',
       onTap: () async {
-        Get.to(() => const FleetPage(), transition: Transition.downToUp);
+        Get.to(() => const PackersPage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.people_alt,
@@ -33,6 +34,22 @@ List homeList = [
       title: 'CONTACTS',
       onTap: () async {
         Get.to(() => const ContactsPage(), transition: Transition.downToUp);
+      }),
+  TileModel(
+      icon: Icons.car_repair,
+      title: 'PICKED UP CARS',
+
+      // });
+      onTap: () {
+        Get.to(() => const PickedUpCarsPage(), transition: Transition.downToUp);
+      }),
+  TileModel(
+      icon: Icons.car_crash_sharp,
+      title: 'RESALE LIST',
+
+      // });
+      onTap: () {
+        Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.calculate,

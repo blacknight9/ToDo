@@ -8,6 +8,8 @@ import 'package:ent5m/views/ShopsListPage/AddShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../constants/appConstants.dart';
+
 class ShopsPage extends StatelessWidget {
   const ShopsPage({super.key});
 
@@ -53,8 +55,8 @@ class ShopsPage extends StatelessWidget {
                           child: Text(shopsListModel.address)),
 
                       trailing: TextButton(onPressed: () {  
-                        shopsController.makePhoneCall(shopsListModel.phoneNumber);
-                      }, child: Text(shopsController.formatPhoneNumber(shopsListModel.phoneNumber)),),
+                       makePhoneCall(shopsListModel.phoneNumber);
+                      }, child: Text(formatPhoneNumber(shopsListModel.phoneNumber)),),
                     );
                 
               });

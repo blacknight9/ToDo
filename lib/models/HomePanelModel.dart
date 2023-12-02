@@ -11,25 +11,34 @@ HomePanelModel homePanelModelFromJson(String str) => HomePanelModel.fromJson(jso
 String homePanelModelToJson(HomePanelModel data) => json.encode(data.toJson());
 
 class HomePanelModel {
-  final String title;
-  final String message;
+  final String? title;
+  final String? message;
   final bool isPinned;
   final DateTime timeStamp;
-  final String dp;
+  final String? dp;
   final String type;
-  final String userName;
+  final String? userName;
+  final String? name;
+  final String? desc;
+  final String? phoneNumber;
 
   HomePanelModel({
-    required this.title,
-    required this.message,
-    required this.isPinned,
+     this.title,
+     this.message,
+     required this.isPinned,
     required this.timeStamp,
-    required this.dp,
+     this.dp,
     required this.type,
-    required this.userName,
+    this.userName,
+    this.desc,
+    this.phoneNumber,
+    this.name
   });
 
   factory HomePanelModel.fromJson(Map<String, dynamic> json) => HomePanelModel(
+    desc: json["desc"],
+    phoneNumber: json["phoneNumber"],
+    name: json["name"],
     title: json["title"],
     message: json["message"],
     isPinned: json["isPinned"],
@@ -41,6 +50,9 @@ class HomePanelModel {
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "name": name,
+    "phoneNumber": phoneNumber,
+    "desc": desc,
     "message": message,
     "isPinned": isPinned,
     "timeStamp": timeStamp,

@@ -1,7 +1,7 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:ent5m/constants/Colors.dart';
 import 'package:ent5m/views/CalculatorsPage/CalculatorsPage.dart';
-import 'package:ent5m/views/ContactsPage/ContacsPage.dart';
+import 'package:ent5m/views/ContactsPage/ContactsPage.dart';
 import 'package:ent5m/views/FleetPage/FleetPage.dart';
 import 'package:ent5m/views/Home/HomePage.dart';
 import 'package:ent5m/views/MenuPage/MenuPage.dart';

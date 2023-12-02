@@ -82,16 +82,6 @@ class ShopsController extends GetxController {
   }
 
 
-  Future<void> makePhoneCall(String phoneNumber) async {
-    // Properly create a Uri object from the phone number string
-    Uri telUrl = Uri.parse('tel:$phoneNumber');
-
-    if (await canLaunchUrl(telUrl)) {
-      await launchUrl(telUrl);
-    } else {
-      throw 'Could not launch the phone dialer.';
-    }
-  }
 
 
 
@@ -116,19 +106,7 @@ class ShopsController extends GetxController {
 
   }
 
-  String formatPhoneNumber(String number) {
-    // Remove any non-digit characters from the input
-    String digitsOnly = number.replaceAll(RegExp(r'\D'), '');
 
-    // Check if the string contains exactly 10 digits
-    if (digitsOnly.length == 10) {
-      // Format the string as (XXX) XXX-XXXX
-      return '(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6)}';
-    } else {
-      // Return the original string or handle the error as needed
-      return number;
-    }
-  }
 
 
 }

@@ -73,7 +73,7 @@ class HomePanel extends StatelessWidget {
                           children: [
                             homeController.isSo.value == true
                                 ? const Text(
-                                    'SOLD OUT: ',
+                                    'SOLD OUT',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red),

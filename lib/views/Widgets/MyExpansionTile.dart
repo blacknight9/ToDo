@@ -28,7 +28,7 @@ class MyExpansionTile extends StatelessWidget {
             // collapsedBackgroundColor: Colors.green.shade600,
             // collapsedIconColor: Colors.red,
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(homePanelModel.dp),
+              backgroundImage: NetworkImage(homePanelModel.dp!),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -42,7 +42,7 @@ class MyExpansionTile extends StatelessWidget {
                   style:  const TextStyle(fontWeight: FontWeight.bold ),
                 ),
                 Text(
-                  homePanelModel.title,
+                  homePanelModel.title!,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -51,7 +51,7 @@ class MyExpansionTile extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(homePanelModel.message),
+                child: Text(homePanelModel.message!),
               ),
             ]),
       ),
