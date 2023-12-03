@@ -18,7 +18,7 @@ class NotesPage extends StatelessWidget {
     HomeController homeController = Get.put(HomeController());
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('notes')

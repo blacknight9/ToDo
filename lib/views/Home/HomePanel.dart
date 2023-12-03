@@ -21,7 +21,7 @@ class HomePanel extends StatelessWidget {
 
     DateTime dateTime = DateTime.now().toLocal();
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: ResponsiveMaxWidthContainer(
         child: GestureDetector(
           onTap: () {
