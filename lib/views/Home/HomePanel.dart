@@ -30,7 +30,7 @@ class HomePanel extends StatelessWidget {
           child: Obx(
             () => Container(
               decoration: BoxDecoration(
-                  color: myPrimary,
+                  color:myPrimaryAccent,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: myAppBar, width: 1)),
               width: MediaQuery.of(context).size.width,
