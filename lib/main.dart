@@ -1,4 +1,5 @@
 import 'package:calendar_view/calendar_view.dart';
+import 'package:ent5m/Middleware/AuthMiddleware.dart';
 import 'package:ent5m/constants/Colors.dart';
 import 'package:ent5m/views/CalculatorsPage/CalculatorsPage.dart';
 import 'package:ent5m/views/ContactsPage/ContactsPage.dart';
@@ -7,6 +8,8 @@ import 'package:ent5m/views/Home/HomePage.dart';
 import 'package:ent5m/views/MenuPage/MenuPage.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:ent5m/views/ShopsListPage/ShopsListPage.dart';
+import 'package:ent5m/views/Singup_Login/LoginPage.dart';
+import 'package:ent5m/views/Singup_Login/SignupPage.dart';
 import 'package:ent5m/views/StaffPage/StaffPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,21 +40,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialRoute: '/',
-      // getPages: [
-      //   GetPage(name: '/ShopsPage', page: () => const ShopsPage()),
-      //   GetPage(name: '/MenuPage', page: () => const MenuPage()),
-      //   GetPage(name: '/StaffPage', page: () => const StaffPage()),
-      //   GetPage(name: '/FleetPage', page: () => const FleetPage()),
-      //   GetPage(name: '/ContactsPage', page: () => const ContactsPage()),
-      //   GetPage(name: '/CalculatorsPage', page: () => const CalculatorsPage()),
-      // ],
+      getPages: [
+        GetPage(name: '/', page: () => const HomePage(),middlewares: [AuthMiddleware()]),
+        GetPage(name: '/loginPage', page: () => const LoginPage(),),
+        // GetPage(name: '/StaffPage', page: () => const StaffPage()),
+        // GetPage(name: '/FleetPage', page: () => const FleetPage()),
+        // GetPage(name: '/ContactsPage', page: () => const ContactsPage()),
+        // GetPage(name: '/CalculatorsPage', page: () => const CalculatorsPage()),
+      ],
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
           scaffoldBackgroundColor: myPrimary,
           appBarTheme: AppBarTheme(backgroundColor: myHomeIcons, foregroundColor: Colors.grey.shade100)),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+
     );
   }
 }

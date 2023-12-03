@@ -1,4 +1,7 @@
+import 'package:ent5m/views/Singup_Login/LoginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../models/HomeList.dart';
 import '../ResponsiveMaxWidthContainer.dart';
@@ -14,6 +17,13 @@ class MenuPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MENU'),
+        leading: IconButton(onPressed: ()=>Get.back(), icon: const Icon(Icons.close)),
+        actions: [
+          IconButton(onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            Get.offAll(()=>const LoginPage());
+          } , icon: const Icon(Icons.exit_to_app)),
+        ],
       ),
       body:  Padding(
         padding: const EdgeInsets.all(8.0),

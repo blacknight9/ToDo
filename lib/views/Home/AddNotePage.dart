@@ -40,7 +40,7 @@ class AddNotePage extends StatelessWidget {
                 },
               )),
               ElevatedButton(
-                onPressed: () => homeController.addNote(),
+                onPressed: () => homeController.addNote(context),
                 child: const Text('Save Note'),
               ),
             ],

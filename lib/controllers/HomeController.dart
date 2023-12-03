@@ -8,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../views/Widgets/showPasswordVerificationDialog.dart';
+
 class HomeController extends GetxController {
   var title = ''.obs;
   var message = ''.obs;
@@ -24,10 +26,8 @@ class HomeController extends GetxController {
   final TextEditingController hotAlertController = TextEditingController();
   final TextEditingController sqiController = TextEditingController();
 
- late Stream<QuerySnapshot>pinnedStream;
- late Stream<QuerySnapshot>notesStream;
-
-
+  late Stream<QuerySnapshot> pinnedStream;
+  late Stream<QuerySnapshot> notesStream;
 
   @override
   onInit() {
@@ -42,28 +42,38 @@ class HomeController extends GetxController {
         .collection('notes')
         .orderBy('timeStamp', descending: true)
         .snapshots();
-
   }
 
   Future<void> updateHomePanelData() async {
     try {
-      await FirebaseFirestore.instance.collection('homePanel').doc('homePanel').update({
+      await FirebaseFirestore.instance
+          .collection('homePanel')
+          .doc('homePanel')
+          .update({
         'so': int.parse(soController.text),
         'cs': int.parse(csController.text),
         'addRev': double.parse(addRevController.text),
         'hotAlert': int.parse(hotAlertController.text),
         'sqi': int.parse(sqiController.text),
-
       });
-      Fluttertoast.showToast(msg:'Success, Data updated successfully',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
+      Fluttertoast.showToast(
+          msg: 'Success, Data updated successfully',
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 3);
     } catch (e) {
-      Fluttertoast.showToast(msg:'Error, Failed to update data',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
+      Fluttertoast.showToast(
+          msg: 'Error, Failed to update data',
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 3);
       print(e);
     }
   }
 
   void getHomePanelData() {
-    CollectionRef.path(path: 'homePanel').doc('homePanel').snapshots().listen((event) {
+    CollectionRef.path(path: 'homePanel')
+        .doc('homePanel')
+        .snapshots()
+        .listen((event) {
       var data = event.data() as Map<String, dynamic>;
       cs.value = data['cs'];
       addRev.value = data['addRev'];
@@ -74,49 +84,51 @@ class HomeController extends GetxController {
     });
   }
 
-
-
-  Future<void> addNote() async {
+  Future<void> addNote(context) async {
     try {
-      CollectionReference notes = FirebaseFirestore.instance.collection('notes');
+      CollectionReference notes =
+          FirebaseFirestore.instance.collection('notes');
 
       // If the new note is pinned, unpin all other notes first
-      if(message.value.isEmpty || title.value.isEmpty) {
-        Fluttertoast.showToast(msg: 'Fields can\'t be empty',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
+      if (message.value.isEmpty || title.value.isEmpty) {
+        Fluttertoast.showToast(
+            msg: 'Fields can\'t be empty',
+            toastLength: Toast.LENGTH_LONG,
+            timeInSecForIosWeb: 3);
         return;
-      }
-      else {
-        if (isPinned.value == true) {
-          // Get all pinned notes
-          QuerySnapshot querySnapshot = await notes.where('isPinned', isEqualTo: true).get();
+      } else {
+        showPasswordVerificationDialog(context, () async {
+          if (isPinned.value == true) {
+            // Get all pinned notes
+            QuerySnapshot querySnapshot =
+                await notes.where('isPinned', isEqualTo: true).get();
 
-          // Iterate and update each pinned note to be unpinned
-          for (var doc in querySnapshot.docs) {
-            await notes.doc(doc.id).update({'isPinned': false});
+            // Iterate and update each pinned note to be unpinned
+            for (var doc in querySnapshot.docs) {
+              await notes.doc(doc.id).update({'isPinned': false});
+            }
           }
-        }
 
-        // Add the new note
-        await notes.add(HomePanelModel(
-            title: title.value,
-            message: message.value,
-            isPinned: isPinned.value,
-            timeStamp: DateTime.now().toUtc(),
-            dp: randomImage,
-            type: 'note',
-            userName: 'userName')
-            .toJson());
+          // Add the new note
+          await notes.add(HomePanelModel(
+                  title: title.value,
+                  message: message.value,
+                  isPinned: isPinned.value,
+                  timeStamp: DateTime.now().toUtc(),
+                  dp: randomImage,
+                  type: 'note',
+                  userName: 'userName')
+              .toJson());
 
-        // Reset fields after saving
-        title.value = '';
-        message.value = '';
-        isPinned.value = false;
-        Get.back();
+          // Reset fields after saving
+          title.value = '';
+          message.value = '';
+          isPinned.value = false;
+          Get.back();
+        });
       }
-
     } catch (e) {
       print(e);
     }
   }
-
 }
