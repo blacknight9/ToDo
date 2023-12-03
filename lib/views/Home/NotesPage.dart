@@ -8,7 +8,7 @@ import 'package:ent5m/views/Home/AddNotePage.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:ent5m/views/Widgets/MyExpansionTile.dart';
 
-import '../constants/Colors.dart';
+import '../../constants/Colors.dart';
 
 class NotesPage extends StatelessWidget {
   const NotesPage({super.key});
@@ -69,9 +69,10 @@ class NotesPage extends StatelessWidget {
             child: ListView.builder(
               itemCount: combinedNotes.length,
               itemBuilder: (context, index) {
+
                 var data = combinedNotes[index];
-                var data2 = snapshot.data!.docs[index];
-                print(data['type']);
+
+
                 HomePanelModel homePanelModel = HomePanelModel.fromJson(data.data() as Map<String, dynamic>);
                 return
                   homePanelModel.type == 'contact' ?
@@ -86,7 +87,7 @@ class NotesPage extends StatelessWidget {
                             ),
                             child: ListTile(
                               contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                              leading: CircleAvatar(backgroundImage: NetworkImage(randomImage),),
+                              leading:  const Icon(Icons.call,color: Colors.orange,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               tileColor: Colors.blueGrey,
                               title: Text(homePanelModel.name!),
@@ -96,6 +97,86 @@ class NotesPage extends StatelessWidget {
                           ),
                         ),
                       ) :
+                  homePanelModel.type == 'resale' ?
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink(
+
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                          leading: const Icon(Icons.money,color: Colors.green,),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          tileColor: Colors.yellow.shade200,
+                          title: Text('(${homePanelModel.type.toUpperCase()}) ${homePanelModel.carDesc!}'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              homePanelModel.unit!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('UNIT: ${homePanelModel.unit}'),
+                              homePanelModel.vin!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('VIN: ${homePanelModel.vin}'),
+                              homePanelModel.plates!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('PLATES: ${homePanelModel.plates}'),
+                            ],
+                          ),
+                          trailing: Text(format3.format(homePanelModel.timeStamp)),
+                        ),
+                      ),
+                    ),
+                  ) :
+                  homePanelModel.type == 'gas' ?
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink(
+
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: ListTile(
+                          textColor: Colors.grey.shade100,
+                          contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                            visualDensity: VisualDensity.adaptivePlatformDensity,
+                            leading: const Icon(Icons.local_gas_station,color: Colors.green,),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          tileColor: Colors.grey.shade800,
+                          title: Text(homePanelModel.userName!),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Mi: ${homePanelModel.mileage}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                              homePanelModel.unit!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('UNIT: ${homePanelModel.unit}'),
+                              homePanelModel.vin!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('VIN: ${homePanelModel.vin}'),
+                              homePanelModel.plates!.isEmpty ?
+                              const SizedBox.shrink() :
+                              Text('PLATES: ${homePanelModel.plates}'),
+                            ],
+                          ),
+                          trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('\$${homePanelModel.cost}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                              Text(format3.format(homePanelModel.timeStamp,),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+                            ],
+                          )
+                        ),
+                      ),
+                    ),
+                  ) :
 
                   MyExpansionTile(homePanelModel: homePanelModel);
               },

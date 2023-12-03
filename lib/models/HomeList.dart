@@ -1,6 +1,8 @@
 import 'package:ent5m/views/FleetPage/PackersPage.dart';
-import 'package:ent5m/views/NotesPage.dart';
+import 'package:ent5m/views/GasPage/GasPage.dart';
+import 'package:ent5m/views/Home/NotesPage.dart';
 import 'package:ent5m/views/PickedUpCars/PickedUpCarsPage.dart';
+import 'package:ent5m/views/ResalePage/ResalePage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../views/CalculatorsPage/CalculatorsPage.dart';
@@ -49,7 +51,7 @@ List homeList = [
 
       // });
       onTap: () {
-        Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
+        Get.to(() => const ResalePage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.calculate,
@@ -65,7 +67,7 @@ List homeList = [
 
       // });
       onTap: () {
-        Get.to(() => const CalculatorsPage(), transition: Transition.downToUp);
+        Get.to(() => const GasPage(), transition: Transition.downToUp);
       }),
 
 ];

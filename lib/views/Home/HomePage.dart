@@ -1,7 +1,7 @@
 
 import 'package:ent5m/views/Home/AddNotePage.dart';
 import 'package:ent5m/views/Home/HomePanel.dart';
-import 'package:ent5m/views/NotesPage.dart';
+import 'package:ent5m/views/Home/NotesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -22,6 +22,7 @@ class MyExpansionTile extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
         child: ExpansionTile(
+          collapsedTextColor: homePanelModel.isPinned == true ? Colors.white : Colors.black,
             tilePadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
             collapsedBackgroundColor:homePanelModel.isPinned == true ?Colors.red.shade900 : myNoteTileColor,
             backgroundColor: myPrimaryAccent,
