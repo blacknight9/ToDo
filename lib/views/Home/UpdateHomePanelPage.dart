@@ -28,10 +28,20 @@ class UpdateHomePanelPage extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Obx(
+              ()=> SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('SOLD-OUT?'),
+                  value: homeController.isSo.value,
+                  onChanged: (bool value) {
+                    homeController.updateAvailability(value);
+                  }
+                ),
+              ),
               TextField(
                 controller: homeController.csController,
                 decoration: const InputDecoration(labelText: 'COMPLETELY SATISFIED'),
@@ -58,11 +68,7 @@ class UpdateHomePanelPage extends StatelessWidget {
                 keyboardType: TextInputType.number,
               ),
               // ... Other text fields with their respective controllers ...
-              SwitchListTile(
-                title: Text('Is SO'),
-                value: homeController.isSo.value,
-                onChanged: (bool value) => homeController.isSo.value = value,
-              ),
+
               ElevatedButton(
                 onPressed: () {
                   // Update the HomeController values

@@ -1,14 +1,16 @@
 import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/StaffModel.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/Colors.dart';
 import '../../constants/appConstants.dart';
 
 class MyExpansionTile extends StatelessWidget {
-  const MyExpansionTile({required this.homePanelModel, super.key});
+  const MyExpansionTile({required this.homePanelModel, required this.staffModel , super.key});
 
 
   final HomePanelModel homePanelModel;
+  final StaffModel staffModel;
 
   @override
   Widget build(BuildContext context) {
@@ -22,37 +24,49 @@ class MyExpansionTile extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
         child: ExpansionTile(
+          expandedAlignment: Alignment.centerLeft,
           collapsedTextColor: homePanelModel.isPinned == true ? Colors.white : Colors.black,
             tilePadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
             collapsedBackgroundColor:homePanelModel.isPinned == true ?Colors.red.shade900 : myNoteTileColor,
             backgroundColor: myPrimaryAccent,
-            // collapsedBackgroundColor: Colors.green.shade600,
-            // collapsedIconColor: Colors.red,
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(homePanelModel.dp!),
-            ),
+              backgroundColor: myAppBar,child: Text(staffModel.name.split(' ').map((e) => e[0]).take(2).join()),),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            title: Row(
+            title:
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-              homePanelModel.isPinned == true ?const Icon(Icons.push_pin,color: Colors.orange,) : const SizedBox.shrink(),
-                const SizedBox(width: 5,),
+
                 Text(
                   '${homePanelModel.userName}: ',
                   style:  const TextStyle(fontWeight: FontWeight.bold ),
                 ),
                 Text(
-                  homePanelModel.title!,
-                  overflow: TextOverflow.ellipsis,
+                  homePanelModel.title!.toUpperCase(),
+                  overflow: TextOverflow.clip,
                 ),
+
               ],
             ),
-            subtitle: Text(format.format(homePanelModel.timeStamp)),
+            subtitle: Row(
+              children: [
+                Visibility(
+                  visible: homePanelModel.isPinned,
+                  maintainSize: false,
+                  maintainAnimation: false,
+                  maintainState: false,
+                  child: const Icon(Icons.push_pin, color: Colors.orange,size: 20,),
+                ),
+                Text(format.format(homePanelModel.timeStamp)),
+              ],
+            ),
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(homePanelModel.message!),
+                child: Text(homePanelModel.message!.toUpperCase(),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
               ),
             ]),
       ),

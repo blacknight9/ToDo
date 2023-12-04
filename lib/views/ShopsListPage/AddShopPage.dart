@@ -1,4 +1,5 @@
 import 'package:ent5m/constants/Colors.dart';
+import 'package:ent5m/views/Widgets/PasswordVerification.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,49 +17,36 @@ class AddShopPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Add Shop'),
+        title: const Text('Add Shop'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            SizedBox(height: 20,),
-            Obx(() => shopsController.selectedImage.value != null || shopsController.selectedImageWeb.value != null
-                ? CircleAvatar(
-              backgroundImage: kIsWeb
-                  ? NetworkImage(shopsController.selectedImageWeb.value!)
-                  : FileImage(shopsController.selectedImage.value!) as ImageProvider,
-              radius: 40,
-            )
-                : IconButton(
-              onPressed: () => shopsController.pickImage(),
-              icon: const Icon(Icons.add_circle, color: myAppBar, size: 50),
-            ),
-            ),
 
-
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             TextField(
               controller: shopsController.shopNameController,
-              decoration: InputDecoration(labelText: 'Shop Name'),
+              decoration: const InputDecoration(labelText: 'Shop Name'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller:  shopsController.addressController,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: const InputDecoration(labelText: 'Address'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
+              maxLength: 10,
               controller:  shopsController.phoneNumberController,
-              decoration: InputDecoration(labelText: 'Phone Number'),
+              decoration: const InputDecoration(labelText: 'Phone Number'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 // Implement the logic to pick the image, upload, and add the shop
-                shopsController.addShop();
+                Get.bottomSheet(PasswordVerification(onPressed: shopsController.addShop));
               },
-              child: Text('Add Shop'),
+              child: const Text('Add Shop'),
             ),
           ],
         ),

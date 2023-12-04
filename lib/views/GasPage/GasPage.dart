@@ -27,6 +27,7 @@ class GasPage extends StatelessWidget {
         ],
       ),
       body: ResponsiveMaxWidthContainer(
+        maxWidthPercentage: 0.6,
         child: StreamBuilder<QuerySnapshot>(
             stream: CollectionRef.path(path: 'gas').snapshots(),
             builder: (context, snapshot){

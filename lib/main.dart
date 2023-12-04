@@ -14,6 +14,7 @@ import 'package:ent5m/views/StaffPage/StaffPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -41,8 +42,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const HomePage(),middlewares: [AuthMiddleware()]),
-        GetPage(name: '/loginPage', page: () => const LoginPage(),),
+        GetPage(name: '/', page: () => const HomePage(),middlewares: [AuthMiddleware()],transition: Transition.downToUp),
+        GetPage(name: '/loginPage', page: () => const LoginPage()),
         // GetPage(name: '/StaffPage', page: () => const StaffPage()),
         // GetPage(name: '/FleetPage', page: () => const FleetPage()),
         // GetPage(name: '/ContactsPage', page: () => const ContactsPage()),

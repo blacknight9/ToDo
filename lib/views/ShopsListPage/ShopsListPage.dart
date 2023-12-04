@@ -19,11 +19,11 @@ class ShopsPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('SHOPS LIST'),
+        title: const Text('SHOPS LIST'),
         actions: [
           IconButton(onPressed: (){
             Get.bottomSheet(AddShopPage());
-          }, icon: Icon(Icons.add)),
+          }, icon: const Icon(Icons.add)),
         ],
       ),
       body: ResponsiveMaxWidthContainer(
@@ -46,7 +46,7 @@ class ShopsPage extends StatelessWidget {
                     ShopsListModel shopsListModel = ShopsListModel.fromJson(data.data()  as Map<String, dynamic>);
                     
                     return ListTile(
-                      leading: CircleAvatar(backgroundImage: NetworkImage(shopsListModel.logo),),
+                      leading: CircleAvatar(backgroundColor: Colors.redAccent,child: Text(shopsListModel.shopName.split(' ').map((e) => e[0]).take(2).join(),style: const TextStyle(fontWeight: FontWeight.bold),),),
                       title: Text(shopsListModel.shopName),
                       subtitle: InkWell(
                           onTap: (){

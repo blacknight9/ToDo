@@ -5,7 +5,7 @@ class ResponsiveMaxWidthContainer extends StatelessWidget {
   final Widget child;
   final double maxWidthPercentage;
 
-  const ResponsiveMaxWidthContainer({Key? key, required this.child, this.maxWidthPercentage = 0.8}) : super(key: key);
+  const ResponsiveMaxWidthContainer({Key? key, required this.child, this.maxWidthPercentage = 0.65}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

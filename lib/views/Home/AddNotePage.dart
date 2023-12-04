@@ -1,10 +1,14 @@
+import 'package:ent5m/views/Widgets/PasswordVerification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/HomeController.dart';
+import '../../controllers/SignUpLoginController.dart';
 
 class AddNotePage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+  SignUpLoginController signUpLoginController = Get.put(SignUpLoginController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,7 @@ class AddNotePage extends StatelessWidget {
           child: Column(
             children: [
               TextField(
+                maxLength: 15,
                 onChanged: (value) => homeController.title.value = value,
                 decoration: const InputDecoration(labelText: 'Title'),
               ),
@@ -40,7 +45,13 @@ class AddNotePage extends StatelessWidget {
                 },
               )),
               ElevatedButton(
-                onPressed: () => homeController.addNote(context),
+                onPressed: () {
+                  Get.bottomSheet(PasswordVerification(onPressed: () {
+                   signUpLoginController.verifyPassword(addNoteFn: homeController.addNote);
+
+                  },));
+                  // homeController.addNote(context);
+                },
                 child: const Text('Save Note'),
               ),
             ],

@@ -1,6 +1,7 @@
 
 import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:ent5m/views/Home/AddNotePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +13,71 @@ class SignUpLoginController extends GetxController {
   TextEditingController eid = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController veriPassword = TextEditingController();
+
+
+  Future<void> verifyPassword({required VoidCallback addNoteFn}) async {
+      try {
+        User? user = FirebaseAuth.instance.currentUser;
+        String email = user!.email!;  // Handle the case when email might be null
+
+        // Create credential
+        AuthCredential credential = EmailAuthProvider.credential(email: email, password: veriPassword.text);
+
+        // Reauthenticate with Firebase
+        UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+
+        // If successful, perform the desired action here
+        // For example, navigate to AddNotePage or the home screen
+        // Navigator.of(context).pop(); // You might need to pass the context or use Get.back() if using GetX
+          // Your logic for adding a note
+          addNoteFn();
+
+        Get.offAllNamed('/'); // Navigate to home after the action
+      } on FirebaseAuthException catch (e) {
+        print(e);
+        if (e.code == 'wrong-password') {
+          // Handle wrong password case
+          Fluttertoast.showToast(msg: 'WRONG PASSWORD', timeInSecForIosWeb: 3, toastLength: Toast.LENGTH_LONG);
+        }else if (e.code == 'too-many-requests') {
+          Fluttertoast.showToast(msg: 'Access to this account has been temporarily disabled due to many failed login attempts. Please reset your password or try again later.', timeInSecForIosWeb: 3, toastLength: Toast.LENGTH_LONG);
+          // Optionally, navigate the user to a password reset page or display a password reset dialog
+        } else {
+          // Handle other possible errors
+          Fluttertoast.showToast(msg: 'An error occurred', timeInSecForIosWeb: 3, toastLength: Toast.LENGTH_LONG);
+        }
+      }
+
+  }
+
+  // Future<void> verifyPassword(GlobalKey<FormState> formKey) async {
+  //   if (formKey.currentState!.validate()) {
+  //     try {
+  //       User? user = FirebaseAuth.instance.currentUser;
+  //       String email = user!.email!;  // Make sure to handle the case when email might be null
+  //
+  //       // Reauthenticate with Firebase
+  //       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //         email: email,
+  //         password: veriPassword.text,
+  //       );
+  //
+  //       // If successful, you can perform the desired action here
+  //       // For example, Navigator.of(context).pop();
+  //       if(userCredential.user.)
+  //       AddNotePage();
+  //       Get.offAllNamed('/');
+  //     } on FirebaseAuthException catch (e) {
+  //       if (e.code == 'wrong-password') {
+  //         // Handle wrong password case
+  //         Fluttertoast.showToast(msg: 'WRONG PASSWORD',timeInSecForIosWeb: 3, toastLength: Toast.LENGTH_LONG);
+  //       }
+  //       // Handle other possible errors
+  //     }
+  //   }
+  // }
+
+
 
   String _getFirebaseAuthErrorMessage(FirebaseAuthException e) {
     switch (e.code) {

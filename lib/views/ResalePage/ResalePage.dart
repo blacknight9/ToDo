@@ -28,6 +28,7 @@ class ResalePage extends StatelessWidget {
         ],
       ),
       body: ResponsiveMaxWidthContainer(
+        maxWidthPercentage: 0.6,
         child: StreamBuilder<QuerySnapshot>(
             stream: CollectionRef.path(path: 'resale').snapshots(),
             builder: (context, snapshot){

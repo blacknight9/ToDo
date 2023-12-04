@@ -20,47 +20,48 @@ class ShopsController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
 
-  Future<void> pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      if (kIsWeb) {
-        // For web, store the image URL directly
-        selectedImageWeb.value = image.path; // Path is a Blob URL on the web
-      } else {
-        // For mobile, convert to File and proceed
-        File imageFile = File(image.path);
-        String imageUrl = await uploadLogo(imageFile);
-        selectedImage.value = imageFile;
-        selectedImageUrl = imageUrl;
-      }
-    }
-  }
-
-  Future<String> uploadLogo(File imageFile) async {
-    // Create a reference to the Firebase Storage bucket
-    final storageRef = FirebaseStorage.instance.ref();
-
-    // Create a unique file name for the image
-    String fileName = 'shops/shop_${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-    // Create a reference to the file location in storage
-    final fileRef = storageRef.child(fileName);
-
-    try {
-      // Upload the file to the path in storage
-      await fileRef.putFile(imageFile);
-
-      // Once the file is uploaded, get the URL
-      String downloadUrl = await fileRef.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      // Handle any errors during upload
-      print(e);
-      return '';
-    }
-  }
+  //
+  // Future<void> pickImage() async {
+  //   final ImagePicker _picker = ImagePicker();
+  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //
+  //   if (image != null) {
+  //     if (kIsWeb) {
+  //       // For web, store the image URL directly
+  //       selectedImageWeb.value = image.path; // Path is a Blob URL on the web
+  //     } else {
+  //       // For mobile, convert to File and proceed
+  //       File imageFile = File(image.path);
+  //       String imageUrl = await uploadLogo(imageFile);
+  //       selectedImage.value = imageFile;
+  //       selectedImageUrl = imageUrl;
+  //     }
+  //   }
+  // }
+  //
+  // Future<String> uploadLogo(File imageFile) async {
+  //   // Create a reference to the Firebase Storage bucket
+  //   final storageRef = FirebaseStorage.instance.ref();
+  //
+  //   // Create a unique file name for the image
+  //   String fileName = 'shops/shop_${DateTime.now().millisecondsSinceEpoch}.jpg';
+  //
+  //   // Create a reference to the file location in storage
+  //   final fileRef = storageRef.child(fileName);
+  //
+  //   try {
+  //     // Upload the file to the path in storage
+  //     await fileRef.putFile(imageFile);
+  //
+  //     // Once the file is uploaded, get the URL
+  //     String downloadUrl = await fileRef.getDownloadURL();
+  //     return downloadUrl;
+  //   } catch (e) {
+  //     // Handle any errors during upload
+  //     print(e);
+  //     return '';
+  //   }
+  // }
 
 
 
@@ -83,26 +84,41 @@ class ShopsController extends GetxController {
 
 
 
-
+clearForm(){
+    shopNameController.clear();
+    addressController.clear();
+    phoneNumberController.clear();
+}
 
   Future<void> addShop() async {
     // Use the imageUrl in your Shop model
-    ShopsListModel newShop = ShopsListModel(
-        shopName: shopNameController.text,
-        address: addressController.text,
-        phoneNumber: phoneNumberController.text,
-        logo: selectedImageUrl.isNotEmpty ? selectedImageUrl :  selectedImageWeb.value!);
-    if (selectedImageUrl.isNotEmpty || selectedImageWeb.value != null) {
+    if(shopNameController.text.isNotEmpty && phoneNumberController.text.isNotEmpty && addressController.text.isNotEmpty) {
       String docId = phoneNumberController.text.replaceAll(RegExp(r'\D'), '');
-      await CollectionRef.path(path: 'shopsList')
-          .doc(docId)
-          .set(
-        newShop.toJson(),
-      );
+      try{
+        ShopsListModel newShop = ShopsListModel(
+          shopName: shopNameController.text,
+          address: addressController.text,
+          phoneNumber: phoneNumberController.text,);
+
+        await CollectionRef.path(path: 'shopsList')
+            .doc(docId)
+            .set(
+          newShop.toJson(),
+        );
+        clearForm();
+        Get.back();
+        Get.back();
+
+      }
+      catch(e) {
+        print(e);
+      }
+
     } else {
-      Fluttertoast.showToast(msg: 'SelectImage');
-      return ;
+      Fluttertoast.showToast(msg: 'FILL UP THE FORM',toastLength: Toast.LENGTH_LONG,timeInSecForIosWeb: 3);
     }
+
+
 
   }
 

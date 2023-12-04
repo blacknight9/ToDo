@@ -86,13 +86,14 @@ class NotesPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15)
                             ),
                             child: ListTile(
+                              textColor: Colors.grey.shade100,
                               contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
                               leading:  const Icon(Icons.call,color: Colors.orange,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               tileColor: Colors.blueGrey,
                               title: Text(homePanelModel.name!),
                               subtitle: Text(homePanelModel.desc!),
-                              trailing: TextButton(onPressed: ()=>makePhoneCall(homePanelModel.phoneNumber!), child: Text(formatPhoneNumber(homePanelModel.phoneNumber!))),
+                              trailing: TextButton(onPressed: ()=>makePhoneCall(homePanelModel.phoneNumber!), child: Text(formatPhoneNumber(homePanelModel.phoneNumber!),style: TextStyle(color: Colors.grey.shade100),)),
                             ),
                           ),
                         ),
@@ -112,22 +113,22 @@ class NotesPage extends StatelessWidget {
                           leading: const Icon(Icons.money,color: Colors.green,),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           tileColor: Colors.yellow.shade200,
-                          title: Text('(${homePanelModel.type.toUpperCase()}) ${homePanelModel.carDesc!}'),
+                          title: Text('(${homePanelModel.type.toUpperCase()}) ${homePanelModel.carDesc!.toUpperCase()}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               homePanelModel.unit!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('UNIT: ${homePanelModel.unit}'),
+                              Text('UNIT: ${homePanelModel.unit!.toUpperCase()}'),
                               homePanelModel.vin!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('VIN: ${homePanelModel.vin}'),
+                              Text('VIN: ${homePanelModel.vin!.toUpperCase()}'),
                               homePanelModel.plates!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('PLATES: ${homePanelModel.plates}'),
+                              Text('PLATES: ${homePanelModel.plates!.toUpperCase()}'),
                             ],
                           ),
-                          trailing: Text(format3.format(homePanelModel.timeStamp)),
+                          trailing: Text(format3.format(homePanelModel.timeStamp).toUpperCase()),
                         ),
                       ),
                     ),
@@ -178,7 +179,7 @@ class NotesPage extends StatelessWidget {
                     ),
                   ) :
 
-                  MyExpansionTile(homePanelModel: homePanelModel);
+                  MyExpansionTile(homePanelModel: homePanelModel, staffModel:  homeController.currentUserData.first,);
               },
             ),
           );

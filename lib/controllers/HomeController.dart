@@ -3,14 +3,18 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../views/Widgets/showPasswordVerificationDialog.dart';
+import '../views/Widgets/PasswordVerification.dart';
 
 class HomeController extends GetxController {
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
+  final RxList<StaffModel> currentUserData = <StaffModel>[].obs;
   var title = ''.obs;
   var message = ''.obs;
   var isPinned = false.obs;
@@ -32,6 +36,7 @@ class HomeController extends GetxController {
   @override
   onInit() {
     super.onInit();
+    getCurrentUserData ();
     getHomePanelData();
     pinnedStream = FirebaseFirestore.instance
         .collection('notes')
@@ -42,6 +47,24 @@ class HomeController extends GetxController {
         .collection('notes')
         .orderBy('timeStamp', descending: true)
         .snapshots();
+  }
+  
+  getCurrentUserData () {
+
+    CollectionRef.path(path: 'staff').where('uid',isEqualTo: currentUser).snapshots().listen((event)  {
+      for(var x in event.docs) {
+        var data = x.data() as Map<String,dynamic>;
+        StaffModel staffModel = StaffModel.fromJson(data);
+
+        currentUserData.add(staffModel);
+        
+
+      }
+
+    });
+  }
+  void updateAvailability (value) async{
+    await CollectionRef.path(path: 'homePanel').doc('homePanel').update({'isSo' : value});
   }
 
   Future<void> updateHomePanelData() async {
@@ -84,7 +107,7 @@ class HomeController extends GetxController {
     });
   }
 
-  Future<void> addNote(context) async {
+  Future<void> addNote() async {
     try {
       CollectionReference notes =
           FirebaseFirestore.instance.collection('notes');
@@ -97,7 +120,7 @@ class HomeController extends GetxController {
             timeInSecForIosWeb: 3);
         return;
       } else {
-        showPasswordVerificationDialog(context, () async {
+
           if (isPinned.value == true) {
             // Get all pinned notes
             QuerySnapshot querySnapshot =
@@ -115,9 +138,9 @@ class HomeController extends GetxController {
                   message: message.value,
                   isPinned: isPinned.value,
                   timeStamp: DateTime.now().toUtc(),
-                  dp: randomImage,
+                  dp: '',
                   type: 'note',
-                  userName: 'userName')
+                  userName: currentUserData.first.name)
               .toJson());
 
           // Reset fields after saving
@@ -125,7 +148,7 @@ class HomeController extends GetxController {
           message.value = '';
           isPinned.value = false;
           Get.back();
-        });
+
       }
     } catch (e) {
       print(e);

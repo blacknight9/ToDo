@@ -23,7 +23,7 @@ List homeList = [
       icon: Icons.people_alt,
       title: 'STAFF',
       onTap: () async {
-        Get.to(() => const StaffPage(), transition: Transition.downToUp);
+        Get.to(() => StaffPage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.list_alt_rounded,

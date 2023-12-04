@@ -6,7 +6,9 @@ class CalculatorsController extends GetxController {
   final TextEditingController maxRateCont = TextEditingController();
   final TextEditingController vlrCont = TextEditingController();
   final TextEditingController salesTaxCont = TextEditingController();
-  final TextEditingController depositCont = TextEditingController();
+  final TextEditingController oop = TextEditingController();
+  final TextEditingController numOfDays = TextEditingController();
+  final TextEditingController additional = TextEditingController();
 
 
   @override
@@ -16,6 +18,22 @@ class CalculatorsController extends GetxController {
     salesTaxCont.text = 8.35.toString();
 
   }
+
+
+  String calculateDeposit() {
+    double oopValue = double.tryParse(oop.text) ?? 0.0;
+    double numOfDaysValue = double.tryParse(numOfDays.text) ?? 0.0;
+    double additionalValue = double.tryParse(additional.text) ?? 0.0;
+
+    double result = (oopValue * numOfDaysValue) + (additionalValue * numOfDaysValue) + 50;
+
+    // Round up to the nearest 10
+    result = (result / 10).ceil() * 10;
+
+    return result.toStringAsFixed(2); // You might adjust the decimal places as needed
+  }
+
+
 
   String calculateMaxRate() {
     double step1, step2;

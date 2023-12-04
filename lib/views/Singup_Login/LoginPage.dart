@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('LOGIN'),
       ),
       body: ResponsiveMaxWidthContainer(
+        maxWidthPercentage: 0.3,
         child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
