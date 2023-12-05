@@ -1,22 +1,12 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:ent5m/Middleware/AuthMiddleware.dart';
 import 'package:ent5m/constants/Colors.dart';
-import 'package:ent5m/views/CalculatorsPage/CalculatorsPage.dart';
-import 'package:ent5m/views/ContactsPage/ContactsPage.dart';
-import 'package:ent5m/views/FleetPage/FleetPage.dart';
 import 'package:ent5m/views/Home/HomePage.dart';
-import 'package:ent5m/views/MenuPage/MenuPage.dart';
-import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
-import 'package:ent5m/views/ShopsListPage/ShopsListPage.dart';
-import 'package:ent5m/views/Singup_Login/LoginPage.dart';
-import 'package:ent5m/views/Singup_Login/SignupPage.dart';
-import 'package:ent5m/views/StaffPage/StaffPage.dart';
+import 'package:ent5m/views/Signup_Login/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
+
 import 'package:url_strategy/url_strategy.dart';
 
 import 'firebase_options.dart';

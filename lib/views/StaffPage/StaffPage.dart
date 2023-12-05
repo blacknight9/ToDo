@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/constants/Colors.dart';
-import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
-import 'package:ent5m/views/Singup_Login/SignupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
+import '../Signup_Login/SignupPage.dart';
 
 class StaffPage extends StatelessWidget {
   final currentUser = FirebaseAuth.instance.currentUser!.uid;

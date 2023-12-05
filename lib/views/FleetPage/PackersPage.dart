@@ -1,5 +1,6 @@
 import 'package:ent5m/controllers/FleetController.dart';
 import 'package:ent5m/models/ResModel.dart';
+import 'package:ent5m/views/FleetPage/AddResPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -16,13 +17,16 @@ class PackersPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'PACKERS RES',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade100, fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.bold,
+              color: Colors.grey.shade100,
+              fontSize: 18),
         ),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(() => const PackersListPage(), transition: Transition.downToUp);
+                Get.to(() => const PackersListPage(),
+                    transition: Transition.downToUp);
               },
               icon: Icon(
                 Icons.bus_alert_outlined,
@@ -30,7 +34,8 @@ class PackersPage extends StatelessWidget {
               )),
           IconButton(
               onPressed: () {
-                fleetController.addPacker(unitNumber: '7vr624');
+                Get.to(()=> AddReservationView());
+                // fleetController.addPacker(unitNumber: '7vr624');
               },
               icon: Icon(
                 Icons.add,
@@ -39,12 +44,57 @@ class PackersPage extends StatelessWidget {
         ],
       ),
       body: GetBuilder<FleetController>(
-        builder: (FleetController fleetController) => SfCalendar(
-          view: CalendarView.month,
-          cellBorderColor: Colors.transparent,
-          dataSource: MeetingDataSource(fleetController.reservations),
-          monthViewSettings: const MonthViewSettings(appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        ),
+        builder: (FleetController fleetController) =>
+            SfCalendar(
+              view: CalendarView.month,
+              cellBorderColor: Colors.transparent,
+              dataSource: MeetingDataSource(fleetController.reservations),
+              monthViewSettings:  const MonthViewSettings(
+                appointmentDisplayCount: 4,
+                agendaStyle: AgendaStyle(
+                  appointmentTextStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)
+                ),
+                showAgenda: true,
+                  appointmentDisplayMode: MonthAppointmentDisplayMode
+                      .appointment),
+              // appointmentBuilder: (context, details) {
+              //   final ResModel appointment = details.appointments.first;
+              //
+              //   return Container(
+              //     width: details.bounds.width,
+              //     height: details.bounds.height,
+              //     decoration: BoxDecoration(
+              //       color: appointment.background,
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     child: Center(
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //        Flexible(
+              //          child: Text(
+              //               '${appointment.eventName} ',
+              //               overflow: TextOverflow.ellipsis,
+              //               style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+              //             ),
+              //        ),
+              //           Text(
+              //             '${appointment.unit} ',
+              //             maxLines: 2,
+              //             overflow: TextOverflow.ellipsis,
+              //             style: const TextStyle(color: Colors.yellow, fontSize: 14, fontWeight: FontWeight.bold),
+              //           ),
+              //           Text(
+              //             appointment.size,
+              //             overflow: TextOverflow.ellipsis,
+              //             style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+              //           ),
+              //         ],
+              //       ),
+              //
+              //     ),);
+              // },
+            ),
       ),
     );
   }
@@ -67,7 +117,7 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return appointments![index].eventName;
+    return '${appointments![index].eventName} ${appointments![index].unit} ${appointments![index].size}';
   }
 
   @override

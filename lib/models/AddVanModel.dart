@@ -17,8 +17,7 @@ class AddVanModel {
   final String year;
   final String plates;
   final String state;
-  final int seats;
-  final String photo;
+  final String seats;
 
   AddVanModel({
     required this.unitNumber,
@@ -29,7 +28,6 @@ class AddVanModel {
     required this.plates,
     required this.state,
     required this.seats,
-    required this.photo,
   });
 
   factory AddVanModel.fromMap(Map<String, dynamic> json) => AddVanModel(
@@ -41,7 +39,6 @@ class AddVanModel {
     plates: json["plates"],
     state: json["state"],
     seats: json["seats"],
-    photo: json["photo"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -53,6 +50,5 @@ class AddVanModel {
     "plates": plates,
     "state": state,
     "seats": seats,
-    "photo": photo,
   };
 }
