@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -7,181 +9,208 @@ import 'package:ent5m/controllers/FleetController.dart';
 
 import '../../models/AddVanModel.dart';
 
-class AddReservationView extends StatelessWidget {
-  final FleetController fleetController = Get.put(FleetController());
+class AddReservationView extends StatefulWidget {
 
   AddReservationView({super.key});
+
+  @override
+  State<AddReservationView> createState() => _AddReservationViewState();
+}
+
+class _AddReservationViewState extends State<AddReservationView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+
+  final FleetController fleetController = Get.put(FleetController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Reservation'),
+        title: const Text('Add Reservation'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: ResponsiveMaxWidthContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 5, right: 5),
-                title: Text('From'),
-                subtitle: Obx(() => Text(
-                      fleetController.fromDate.value != null
-                          ? '${DateFormat('MM-dd-yyyy').format(fleetController.fromDate.value!)} ${DateFormat('hh:mm a').format(fleetController.fromDate.value!)}'
-                          : 'Select Date',
-                    )),
-                trailing: Icon(Icons.date_range),
-                onTap: () =>
-                    fleetController.pickDate(context, isStartDate: true),
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 5, right: 5),
-                title: Text('To'),
-                subtitle: Obx(() => Text(
-                      fleetController.toDate.value != null
-                          ? '${DateFormat('MM-dd-yyyy').format(fleetController.toDate.value!)} ${DateFormat('hh:mm a').format(fleetController.toDate.value!)}'
-                          : 'Select Date',
-                    )),
-                trailing: Icon(Icons.date_range),
-                onTap: () =>
-                    fleetController.pickDate(context, isStartDate: false),
-              ),
-              TextFormField(
-                controller: fleetController.eventNameController,
-                decoration: const InputDecoration(labelText: 'Event Name'),
-                validator: (value) =>
-                    value!.isEmpty ? 'This field cannot be empty' : null,
-              ),
-              Obx(() => DropdownButtonFormField<AddVanModel>(
-                    value: fleetController.selectedVan.value,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Van',
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Obx(
+              ()=> Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    title: Row(
+                      children: [
+                        fleetController.fromDate.value == null ?
+                        const Text('!',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.redAccent),)
+                        : const SizedBox.shrink(),
+                        const SizedBox(width: 5,),
+                        const Text('From'),
+                      ],
                     ),
-                    items: fleetController.vansList.map((van) {
-                      return DropdownMenuItem(
-                        value: van,
-                         child:Center(
-                           child: RichText(
-                             text: TextSpan(
-                               // Default text style for all spans
-                               style: const TextStyle(color: Colors.black,fontSize: 16),
-                               children: <TextSpan>[
-                                 const TextSpan(
-                                   text: 'MAKE: ',
-                                   style: TextStyle(fontWeight: FontWeight.bold), // Style for label
-                                 ),
-                                 TextSpan(
-                                   text: '${van.make.toUpperCase()}  ', // Added spaces for separation
-                                 ),
-                                 const TextSpan(
-                                   text: 'UNIT: ',
-                                   style: TextStyle(fontWeight: FontWeight.bold), // Style for label
-                                 ),
-                                 TextSpan(
-                                   text: '${van.unitNumber.toUpperCase()}  ', // Added spaces for separation
-                                 ),
-                                 const TextSpan(
-                                   text: 'SEATS: ',
-                                   style: TextStyle(fontWeight: FontWeight.bold), // Style for label
-                                 ),
-                                 TextSpan(
-                                   text: van.seats, // No need for toUpperCase() for numbers
-                                 ),
-                               ],
-                             ),
-                           ),
-                         ),
-
-
-                        // Center(child: Text(
-                        //     '    MAKE: ${van.make.toUpperCase()}'
-                        //         '    UNIT: ${van.unitNumber.toUpperCase()}'
-                        //         '    SEATS: ${van.seats}')
-                        // ,),
-
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     CircleAvatar(backgroundColor: Colors.blue,child: Text(van.seats),),
-                        //     Text(c,
-                        //     Text(van.unitNumber),
-                        //   ],
-                        // ),
-                      );
-                    }).toList(),
-                    onChanged: (van) {
-                      if (van != null) {
-                        fleetController.selectedVan.value = van;
-                        // You can access van.unitNumber or other properties here
-                        // and do something with it, like saving to a variable
-                      }
-                    },
-                  )),
-              TextFormField(
-                controller: fleetController.unitController,
-                decoration: const InputDecoration(labelText: 'Unit'),
-              ),
-              TextFormField(
-                controller: fleetController.sizeController,
-                decoration: InputDecoration(labelText: 'Size'),
-              ),
-              TextFormField(
-                controller: fleetController.noteController,
-                decoration: const InputDecoration(labelText: 'Note'),
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 5, right: 5),
-                title: const Text('Color'),
-                trailing: Obx(() => Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: fleetController.currentColor.value,
-                        shape: BoxShape.circle,
-                      ),
-                    )),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Pick a color'),
-                        content: SingleChildScrollView(
-                            child: ColorPicker(
-                          pickerColor: fleetController.currentColor.value,
-                          onColorChanged: (Color color) {
-                            fleetController.currentColor.value = color;
-                          },
+                    subtitle: Obx(() => Text(
+                          fleetController.fromDate.value != null
+                              ? '${DateFormat('MM-dd-yyyy').format(fleetController.fromDate.value!)} '
+                              : 'Select Date',
                         )),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            child: const Text('Done'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                    trailing: const Icon(Icons.date_range),
+                    onTap: () =>
+                        fleetController.pickDate(context, isStartDate: true),
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    title: Row(
+                      children: [
+                        fleetController.toDate.value == null ?
+                        const Text('!',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.redAccent),)
+                            : const SizedBox.shrink(),
+                        const SizedBox(width: 5,),
+                        const Text('To'),
+                      ],
+                    ),
+                    subtitle: Obx(() => Text(
+                          fleetController.toDate.value != null
+                              ? '${DateFormat('MM-dd-yyyy').format(fleetController.toDate.value!)} '
+                              : 'Select Date',
+                        )),
+                    trailing: const Icon(Icons.date_range),
+                    onTap: () =>
+                        fleetController.pickDate(context, isStartDate: false),
+                  ),
+                  TextFormField(
+                    controller: fleetController.eventNameController,
+                    decoration: const InputDecoration(labelText: 'Description'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'This field cannot be empty' : null,
+                  ),
+                  Obx(
+                        () => DropdownButtonFormField<AddVanModel>(
+                      value: fleetController.selectedVan.value,
+                      decoration: const InputDecoration(
+                        labelText: 'Select Van',
+                      ),
+                      items: [
+                        const DropdownMenuItem<AddVanModel>(
+                          value: null, // Represents no selection
+                          child: Center(
+                            child: Text("None", style: TextStyle(color: Colors.black54)),
                           ),
-                        ],
+                        ),
+                        ...fleetController.vansList.map((van) {
+                          return DropdownMenuItem<AddVanModel>(
+                            value: van,
+                            child: Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                      text: 'MAKE: ',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: '${van.make.toUpperCase()}  ',
+                                    ),
+                                    const TextSpan(
+                                      text: 'UNIT: ',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: '${van.unitNumber.toUpperCase()}  ',
+                                    ),
+                                    const TextSpan(
+                                      text: 'SEATS: ',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                      text: van.seats.toString(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (van) {
+                        fleetController.selectedVan.value = van;
+                      },
+                    ),
+                  ),
+
+                 fleetController.selectedVan.value == null ? TextFormField(
+                   validator: (value) =>
+                   value!.isEmpty ? 'This field cannot be empty' : null,
+                    controller: fleetController.unitController,
+                    decoration: const InputDecoration(labelText: 'Unit'),
+                  ) : const SizedBox.shrink(),
+                  fleetController.selectedVan.value == null ? TextFormField(
+                    validator: (value) =>
+                    value!.isEmpty ? 'This field cannot be empty' : null,
+                    controller: fleetController.sizeController,
+                    decoration: const InputDecoration(labelText: 'Size'),
+                  ) : const SizedBox.shrink(),
+                  TextFormField(
+                    controller: fleetController.noteController,
+                    decoration: const InputDecoration(labelText: 'Note'),
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    title: const Text('Color'),
+                    trailing: Obx(() => Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: fleetController.currentColor.value,
+                            shape: BoxShape.circle,
+                          ),
+                        )),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Pick a color'),
+                            content: SingleChildScrollView(
+                                child: ColorPicker(
+                              pickerColor: fleetController.currentColor.value,
+                              onColorChanged: (Color color) {
+                                fleetController.currentColor.value = color;
+                              },
+                            )),
+                            actions: <Widget>[
+                              ElevatedButton(
+                                child: const Text('Done'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+                  // Obx(() => SwitchListTile(
+                  //       contentPadding: const EdgeInsets.only(left: 5, right: 0),
+                  //       title: const Text('All Day Event'),
+                  //       value: fleetController.isAllDay.value,
+                  //       onChanged: (val) => fleetController.isAllDay.value = val,
+                  //     )),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      child: const Text('Save Reservation'),
+                      onPressed: () {
+                        fleetController.addAppointment(_formKey);
+                      },
+                    ),
+                  ),
+                ],
               ),
-              Obx(() => SwitchListTile(
-                    contentPadding: const EdgeInsets.only(left: 5, right: 0),
-                    title: const Text('All Day Event'),
-                    value: fleetController.isAllDay.value,
-                    onChanged: (val) => fleetController.isAllDay.value = val,
-                  )),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                child: Text('Save Reservation'),
-                onPressed: () {
-                  fleetController.addAppointment();
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),

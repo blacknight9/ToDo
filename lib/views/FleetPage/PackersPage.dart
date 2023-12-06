@@ -1,6 +1,7 @@
 import 'package:ent5m/controllers/FleetController.dart';
 import 'package:ent5m/models/ResModel.dart';
 import 'package:ent5m/views/FleetPage/AddResPage.dart';
+import 'package:ent5m/views/FleetPage/Reservations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -32,6 +33,9 @@ class PackersPage extends StatelessWidget {
                 Icons.bus_alert_outlined,
                 color: Colors.grey.shade100,
               )),
+          IconButton(onPressed: (){
+            Get.to(()=> Reservations(),transition: Transition.downToUp);
+          }, icon: const Icon(Icons.list)),
           IconButton(
               onPressed: () {
                 Get.to(()=> AddReservationView());
@@ -41,6 +45,7 @@ class PackersPage extends StatelessWidget {
                 Icons.add,
                 color: Colors.grey.shade100,
               )),
+          
         ],
       ),
       body: GetBuilder<FleetController>(

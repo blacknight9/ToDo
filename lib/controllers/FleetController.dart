@@ -2,13 +2,19 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../models/AddVanModel.dart';
 import '../models/ResModel.dart';
+import '../models/StaffModel.dart';
 
 class FleetController extends GetxController {
+  final currentUser = FirebaseAuth.instance.currentUser!.uid;
+  final RxList<StaffModel> currentUserData = <StaffModel>[].obs;
+
   RxString selectedPacker= 'test1'.obs;
   var vansList = <AddVanModel>[].obs;
   var selectedVan = Rxn<AddVanModel>();
@@ -29,7 +35,7 @@ class FleetController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     fetchVans();
-    // addAppointment();
+    getCurrentUserData ();
     getDataSource();
   }
 
@@ -41,6 +47,23 @@ class FleetController extends GetxController {
     sizeController.dispose();
     noteController.dispose();
   }
+
+
+  getCurrentUserData () async{
+
+    await CollectionRef.path(path: 'staff').where('uid',isEqualTo: currentUser).get().then((event)  {
+      for(var x in event.docs) {
+        var data = x.data() as Map<String,dynamic>;
+        StaffModel staffModel = StaffModel.fromJson(data);
+
+        currentUserData.add(staffModel);
+
+
+      }
+
+    });
+  }
+
   void fetchVans() async {
     FirebaseFirestore.instance.collection('packers').snapshots().listen((snapshot) {
       var vans = snapshot.docs.map((doc) => AddVanModel.fromMap(doc.data())).toList();
@@ -105,8 +128,6 @@ class FleetController extends GetxController {
       reservations.clear();
       for (var x in event.docs) {
         var data = x.data() as Map<String, dynamic>;
-        print(data);
-
         ResModel resModel = ResModel.fromJson(data);
 
         reservations.add(resModel);
@@ -115,22 +136,43 @@ class FleetController extends GetxController {
     });
   }
 
-  Future<void> addAppointment() async {
- try{
-   await CollectionRef.path(path: 'reservations').add(
-       ResModel(
+  clearResForm () {
+    fromDate.value = null;
+    toDate.value = null;
+    eventNameController.clear();
+    unitController.clear();
+    sizeController.clear();
+    noteController.clear();
+  }
 
-           eventName: eventNameController.text,
-           from: fromDate.value!,
-           to: toDate.value!,
-           background: currentColor.value,
-           isAllDay:  isAllDay.value,
-           unit: unitController.text,
-           size: sizeController.text,
-           note: noteController.text).toJson()
-   );
- } catch (e) {
-   print(e);
- }
+  Future<void> addAppointment(GlobalKey<FormState> key) async {
+    if(key.currentState!.validate() && fromDate.value !=null && toDate.value != null) {
+      try{
+
+        await CollectionRef.path(path: 'reservations').add(
+            ResModel(
+                eventName: eventNameController.text,
+                from: fromDate.value!,
+                to: toDate.value!,
+                background: currentColor.value,
+                isAllDay:  isAllDay.value,
+                unit: selectedVan.value != null ? selectedVan.value!.unitNumber : unitController.text,
+                size: selectedVan.value != null ? selectedVan.value!.seats : sizeController.text,
+                note: noteController.text,
+                uid: currentUser,
+              timeStamp: DateTime.now().toUtc(),
+              staffId: currentUserData.first.eid,
+              staffName: currentUserData.first.name,
+            ).toJson()
+        );
+        clearResForm();
+        Get.back();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      Fluttertoast.showToast(msg: 'Fill Up the form',timeInSecForIosWeb: 3, toastLength: Toast.LENGTH_LONG);
+    }
+
   }
 }
