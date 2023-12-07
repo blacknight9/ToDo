@@ -1,6 +1,7 @@
 import 'package:ent5m/views/FleetPage/PackersPage.dart';
 import 'package:ent5m/views/GasPage/GasPage.dart';
 import 'package:ent5m/views/Home/NotesPage.dart';
+import 'package:ent5m/views/LostAndFound/LostAndFoundPage.dart';
 import 'package:ent5m/views/PickedUpCars/PickedUpCarsPage.dart';
 import 'package:ent5m/views/ResalePage/ResalePage.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,15 @@ List homeList = [
       // });
       onTap: () {
         Get.to(() => const GasPage(), transition: Transition.downToUp);
+      }),
+
+  TileModel(
+      icon: Icons.help_center_outlined,
+      title: 'LOST & FOUND',
+
+      // });
+      onTap: () {
+        Get.to(() => const LostAndFoundPage(), transition: Transition.downToUp);
       }),
 
 ];

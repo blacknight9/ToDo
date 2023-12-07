@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,21 +15,34 @@ import '../models/StaffModel.dart';
 class FleetController extends GetxController {
   final currentUser = FirebaseAuth.instance.currentUser!.uid;
   final RxList<StaffModel> currentUserData = <StaffModel>[].obs;
+  final RxList<ResModel> resSearchResults = <ResModel>[].obs;
 
   RxString selectedPacker= 'test1'.obs;
   var vansList = <AddVanModel>[].obs;
   var selectedVan = Rxn<AddVanModel>();
   RxList<ResModel> reservations = <ResModel>[].obs; // Using RxList for reactivity
   final eventNameController = TextEditingController();
+  final phoneController = TextEditingController();
   final unitController = TextEditingController();
   final sizeController = TextEditingController();
   final noteController = TextEditingController();
+  final resNumController = TextEditingController();
+  final packMakeController = TextEditingController();
+  final packModelController = TextEditingController();
+  final packYearController = TextEditingController();
+  final packUnitController = TextEditingController();
+  final packVinController = TextEditingController();
+  final packPlatesController = TextEditingController();
+  final packSeatsController = TextEditingController();
+
+
 
   // Variables for color picker, date, and time
   // var currentColor = Rx<Color>(Colors.blue[500]!);
   Rx<Color> currentColor = const Color(0xff443a49).obs;
   Rx<DateTime?> fromDate = Rx<DateTime?>(null);
   Rx<DateTime?> toDate = Rx<DateTime?>(null);
+  Rx<DateTime?> timeOfPickup = Rx<DateTime?>(null);
   RxBool isAllDay = false.obs;
   @override
   void onInit() {
@@ -46,6 +60,38 @@ class FleetController extends GetxController {
     unitController.dispose();
     sizeController.dispose();
     noteController.dispose();
+  }
+
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      // Use the pickedTime here. It's a TimeOfDay object.
+
+      // If you need a DateTime object:
+      final now = DateTime.now();
+      final selectedDateTime = DateTime(now.year, now.month, now.day, pickedTime.hour, pickedTime.minute);
+      timeOfPickup.value = selectedDateTime;
+      print('Selected DateTime: $selectedDateTime');  // Prints the selected date with time.
+    }
+  }
+
+
+  searchRes() async{
+    if(resNumController.text.isNotEmpty) {
+      try{
+      var getRes =  await CollectionRef.path(path: 'reservations').doc(resNumController.text).get();
+      var data = getRes.data() as Map<String,dynamic>;
+      ResModel resModel = ResModel.fromJson(data);
+      resSearchResults.add(resModel);
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
 
@@ -100,27 +146,36 @@ class FleetController extends GetxController {
     // Trigger any necessary UI updates or notify listeners if needed
   }
 
-  void addPacker({required String unitNumber}) async {
-    await CollectionRef.path(path: 'packers').doc(unitNumber).get().then((value) async {
-      if (value.exists) {
-        print('already in list');
-      } else {
-        try {
-          await CollectionRef.path(path: 'packers').doc(unitNumber).set({
-            'unitNumber': unitNumber,
-            'vin': 'VR123456',
-            'make': 'ford',
-            'model': 'TRANSIT® VAN',
-            'year': 2023,
-            'seats': 15,
-            'photo':
-                'https://www.vdm.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/transitvanwagon/2023/collections/3_2/TT_offroad_2160px-X-926px.jpg/jcr:content/renditions/cq5dam.web.2160.2160.jpeg'
-          });
-        } catch (e) {
-          print(e);
+  void addPacker(GlobalKey<FormState> key) async {
+    if(key.currentState!.validate() && packUnitController.text.isNotEmpty) {
+      await CollectionRef.path(path: 'packers').doc(packUnitController.text).get().then((value) async {
+        if (value.exists) {
+          print('already in list');
+        } else {
+          try {
+           CollectionRef.path(path: 'packers').doc(packUnitController.text).set(
+
+               AddVanModel(
+                 unitNumber: packUnitController.text,
+                 vin: packVinController.text,
+                 plates: packPlatesController.text,
+                 seats: packSeatsController.text,
+                 make: packMakeController.text,
+                 model: packModelController.text,
+                 year: packYearController.text,
+
+               ).toMap(),
+           );
+            Get.back();
+          } catch (e) {
+            print(e);
+          }
         }
-      }
-    });
+      });
+    } else {
+      Fluttertoast.showToast(msg: 'fill up the form',toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 3);
+    }
+
   }
 
   getDataSource() {
@@ -145,17 +200,20 @@ class FleetController extends GetxController {
     noteController.clear();
   }
 
-  Future<void> addAppointment(GlobalKey<FormState> key) async {
-    if(key.currentState!.validate() && fromDate.value !=null && toDate.value != null) {
+  Future<void> addRes(GlobalKey<FormState> key) async {
+    String? resNumber = getRandomId2(8);
+    if(key.currentState!.validate() && fromDate.value !=null && toDate.value != null && timeOfPickup.value != null) {
       try{
 
-        await CollectionRef.path(path: 'reservations').add(
+        resNumber != null ?
+        await CollectionRef.path(path: 'reservations').doc(resNumber).set(
             ResModel(
+              resNumber: resNumber,
                 eventName: eventNameController.text,
                 from: fromDate.value!,
                 to: toDate.value!,
                 background: currentColor.value,
-                isAllDay:  isAllDay.value,
+                isAllDay:  true,
                 unit: selectedVan.value != null ? selectedVan.value!.unitNumber : unitController.text,
                 size: selectedVan.value != null ? selectedVan.value!.seats : sizeController.text,
                 note: noteController.text,
@@ -163,8 +221,10 @@ class FleetController extends GetxController {
               timeStamp: DateTime.now().toUtc(),
               staffId: currentUserData.first.eid,
               staffName: currentUserData.first.name,
+              timeOfPickup: timeOfPickup.value!,
+              phoneNumber: phoneController.text ,
             ).toJson()
-        );
+        ) : Fluttertoast.showToast(msg: 'Res Num is empty');
         clearResForm();
         Get.back();
       } catch (e) {

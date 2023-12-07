@@ -1,12 +1,15 @@
 import 'package:ent5m/controllers/FleetController.dart';
 import 'package:ent5m/models/ResModel.dart';
 import 'package:ent5m/views/FleetPage/AddResPage.dart';
+import 'package:ent5m/views/FleetPage/ResView.dart';
 import 'package:ent5m/views/FleetPage/Reservations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'PackersListPage.dart';
+
+
 
 class PackersPage extends StatelessWidget {
   const PackersPage({super.key});
@@ -34,23 +37,35 @@ class PackersPage extends StatelessWidget {
                 color: Colors.grey.shade100,
               )),
           IconButton(onPressed: (){
-            Get.to(()=> Reservations(),transition: Transition.downToUp);
+            Get.to(()=> const Reservations(),transition: Transition.downToUp);
           }, icon: const Icon(Icons.list)),
           IconButton(
               onPressed: () {
-                Get.to(()=> AddReservationView());
+                Get.to(()=>  AddReservationView());
                 // fleetController.addPacker(unitNumber: '7vr624');
               },
               icon: Icon(
                 Icons.add,
                 color: Colors.grey.shade100,
               )),
-          
+
         ],
       ),
       body: GetBuilder<FleetController>(
         builder: (FleetController fleetController) =>
             SfCalendar(
+              onTap: (CalendarTapDetails details){
+                if (details.targetElement == CalendarElement.appointment) {
+                  Get.to(()=>ResView(resModel: details.appointments!.first as ResModel),transition: Transition.downToUp);
+                }
+              },
+              onLongPress: (calenderTapDetails) {
+
+                  Get.to(()=> AddReservationView(from: calenderTapDetails.date,),transition: Transition.downToUp);
+
+
+
+              },
               view: CalendarView.month,
               cellBorderColor: Colors.transparent,
               dataSource: MeetingDataSource(fleetController.reservations),
@@ -62,43 +77,7 @@ class PackersPage extends StatelessWidget {
                 showAgenda: true,
                   appointmentDisplayMode: MonthAppointmentDisplayMode
                       .appointment),
-              // appointmentBuilder: (context, details) {
-              //   final ResModel appointment = details.appointments.first;
-              //
-              //   return Container(
-              //     width: details.bounds.width,
-              //     height: details.bounds.height,
-              //     decoration: BoxDecoration(
-              //       color: appointment.background,
-              //       borderRadius: BorderRadius.circular(5),
-              //     ),
-              //     child: Center(
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //        Flexible(
-              //          child: Text(
-              //               '${appointment.eventName} ',
-              //               overflow: TextOverflow.ellipsis,
-              //               style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-              //             ),
-              //        ),
-              //           Text(
-              //             '${appointment.unit} ',
-              //             maxLines: 2,
-              //             overflow: TextOverflow.ellipsis,
-              //             style: const TextStyle(color: Colors.yellow, fontSize: 14, fontWeight: FontWeight.bold),
-              //           ),
-              //           Text(
-              //             appointment.size,
-              //             overflow: TextOverflow.ellipsis,
-              //             style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
-              //           ),
-              //         ],
-              //       ),
-              //
-              //     ),);
-              // },
+
             ),
       ),
     );

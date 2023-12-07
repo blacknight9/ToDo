@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/constants/Colors.dart';
+import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,9 @@ class ResView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(resModel.eventName),
+        actions: [
+          IconButton(onPressed: (){}, icon: const Icon(Icons.edit,color: Colors.yellow,))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,6 +32,15 @@ class ResView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+
+                Text(
+                  'RES#: ${resModel.resNumber}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: myAppBar,
+                  ),
+                ),
                 Text(
                   resModel.eventName,
                   style: const TextStyle(
@@ -36,9 +49,18 @@ class ResView extends StatelessWidget {
                     color: myAppBar,
                   ),
                 ),
+                Text(
+                  formatPhoneNumber(resModel.phoneNumber),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: myAppBar,
+                  ),
+                ),
                 const Divider(color: myAppBar),
                 _infoRow('FROM:', DateFormat('MM-dd-yyy').format(resModel.from)),
                 _infoRow('TO:', DateFormat('MM-dd-yyy').format(resModel.to)),
+                _infoRow('TIME:', format2.format(resModel.timeOfPickup)),
                 _infoRow('UNIT:', resModel.unit),
                 _infoRow('SIZE:', resModel.size),
                 const SizedBox(height: 150),

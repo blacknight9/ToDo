@@ -16,7 +16,6 @@ class AddVanModel {
   final String model;
   final String year;
   final String plates;
-  final String state;
   final String seats;
 
   AddVanModel({
@@ -26,7 +25,6 @@ class AddVanModel {
     required this.model,
     required this.year,
     required this.plates,
-    required this.state,
     required this.seats,
   });
 
@@ -37,7 +35,6 @@ class AddVanModel {
     model: json["model"],
     year: json["year"],
     plates: json["plates"],
-    state: json["state"],
     seats: json["seats"],
   );
 
@@ -48,7 +45,6 @@ class AddVanModel {
     "model": model,
     "year": year,
     "plates": plates,
-    "state": state,
     "seats": seats,
   };
 }

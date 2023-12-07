@@ -49,7 +49,19 @@ String? getRandomId(int? length) {
   var values = List<int>.generate(length!, (index) => random.nextInt(255));
   return base64UrlEncode(values);
 }
+
+String getRandomId2(int length) {
+  const characters = '0123456789';
+  var random = Random.secure();
+
+  return String.fromCharCodes(Iterable.generate(
+    length,
+        (_) => characters.codeUnitAt(random.nextInt(characters.length)),
+  ));
+}
+
 final format = intl.DateFormat.yMMMMEEEEd();
+///time only
 final format2 = intl.DateFormat.jm();
 final format3 = intl.DateFormat.MMMEd();
 final format4 = intl.DateFormat.yMMMEd();

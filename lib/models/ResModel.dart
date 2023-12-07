@@ -10,16 +10,22 @@ class ResModel {
   String uid;
   String staffId;
   String staffName;
+  String resNumber;
+  String phoneNumber;
   DateTime from;
   DateTime to;
   DateTime timeStamp;
+  DateTime timeOfPickup;
   Color background;
   bool isAllDay;
 
   ResModel(
       {required this.eventName,
       required this.from,
+        required this.timeOfPickup,
       required this.to,
+        required this.resNumber,
+        required this.phoneNumber,
       required this.staffId,
       required this.staffName,
         required this.uid,
@@ -37,11 +43,14 @@ class ResModel {
       'eventName': eventName,
       'staffId': staffId,
       'staffName': staffName,
+      'phoneNumber': phoneNumber,
       'unit': unit,
       'uid': uid,
       'size': size,
       'note': note,
+      'resNumber': resNumber,
       'timeStamp': timeStamp,
+      'timeOfPickup': timeOfPickup,
       'from': from.toIso8601String(),
       'to': to.toIso8601String(),
       'background': background.value, // Storing color as an integer
@@ -55,8 +64,11 @@ class ResModel {
       eventName: json['eventName'],
       staffId: json['staffId'],
       staffName: json['staffName'],
+      resNumber: json['resNumber'],
+      phoneNumber: json['phoneNumber'],
       uid: json['uid'],
       timeStamp: convertTimestampToDateTime(json['timeStamp']),
+      timeOfPickup: convertTimestampToDateTime(json['timeOfPickup']),
       from: DateTime.parse(json['from']).toLocal(),
       to: DateTime.parse(json['to']).toLocal(),
       background: Color(json['background']),

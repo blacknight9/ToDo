@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ent5m/models/AddVanModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:ent5m/views/FleetPage/AddPcakerPage.dart';
+import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PackersListPage extends StatelessWidget {
   const PackersListPage({super.key});
@@ -8,36 +12,63 @@ class PackersListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('VANS LIST'),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: IconButton(
+                  onPressed: () => Get.to(() => AddPackerPage()),
+                  icon: Icon(Icons.add)))
+        ],
+      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: CollectionRef.path(path: 'packers').snapshots(),
           builder: (context, snapshot) {
-            if(snapshot.hasError) {
+            if (snapshot.hasError) {
               print(snapshot.error);
             }
-            if(snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             }
             return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index){
-                var data = snapshot.data!.docs[index];
-              return ListTile(
-                leading: CircleAvatar(backgroundImage: NetworkImage(data['photo']),),
-                title: Row(
-                  children: [
-                    Text(data['make'].toString().toUpperCase()),
-                    const SizedBox(width: 5,),
-                    Text(data['model']),
-                    const SizedBox(width: 5,),
-                    Text(data['year'].toString()),
-                  ],
-                ),
-                subtitle: Row(children: [
-                  Text(data['unitNumber']),
-                ],),
-              );
-            });
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var data = snapshot.data!.docs[index];
+                  AddVanModel addVanModel = AddVanModel.fromMap(data.data() as Map<String, dynamic>);
+
+                  return ResponsiveMaxWidthContainer(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: addVanModel.seats == '12' ? Colors.blue : Colors.green,
+                            child: Center(child: Text(addVanModel.seats,style: const TextStyle(fontWeight: FontWeight.bold),)),
+                          ),
+                          title: Row(
+                            children: [
+                              Text(addVanModel.make.toUpperCase()),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(addVanModel.model),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(addVanModel.year),
+                            ],
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Text(addVanModel.unitNumber),
+                            ],
+                          ),
+                        ),
+                        const Divider(),
+                      ],
+                    ),
+                  );
+                });
           }),
     );
   }
