@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ent5m/constants/Colors.dart';
 import 'package:ent5m/constants/appConstants.dart';
+import 'package:ent5m/models/ResModel.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,9 +14,11 @@ import 'package:ent5m/controllers/FleetController.dart';
 import '../../models/AddVanModel.dart';
 
 class AddReservationView extends StatefulWidget {
+  ResModel? resModel;
+  bool isEdit = false;
   DateTime? from;
 
-  AddReservationView({this.from, super.key});
+  AddReservationView({required this.isEdit, this.from,this.resModel, super.key});
 
   @override
   State<AddReservationView> createState() => _AddReservationViewState();
@@ -23,7 +26,6 @@ class AddReservationView extends StatefulWidget {
 
 class _AddReservationViewState extends State<AddReservationView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 
   final FleetController fleetController = Get.put(FleetController());
 
@@ -34,13 +36,24 @@ class _AddReservationViewState extends State<AddReservationView> {
     if (widget.from != null) {
       fleetController.fromDate.value = widget.from;
     }
+    if (widget.isEdit == true) {
+      fleetController.eventNameController.text = widget.resModel!.eventName;
+      fleetController.phoneController.text = widget.resModel!.phoneNumber;
+      fleetController.unitController.text = widget.resModel!.unit;
+      fleetController.sizeController.text = widget.resModel!.size;
+      fleetController.noteController.text = widget.resModel!.note;
+      fleetController.fromDate.value = widget.resModel!.from;
+      fleetController.toDate.value = widget.resModel!.to;
+      fleetController.timeOfPickup.value = widget.resModel!.timeOfPickup;
+      fleetController.currentColor.value = widget.resModel!.background;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Reservation'),
+        title: widget.isEdit == false ? const Text('Add Reservation') : const Text('Update Reservation'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -274,9 +287,9 @@ class _AddReservationViewState extends State<AddReservationView> {
                       const SizedBox(height: 20),
                       Center(
                         child: ElevatedButton(
-                          child: const Text('Save Reservation'),
+                          child: widget.isEdit == false ? const Text('Save Reservation') : const Text('Update Reservation'),
                           onPressed: () {
-                            fleetController.addRes(_formKey);
+                            fleetController.addRes(key: _formKey, isEdit: widget.isEdit, resModel: widget.resModel);
                           },
                         ),
                       ),

@@ -1,6 +1,8 @@
+import 'package:ent5m/views/LostAndFound/AddLostAndFound.dart';
 import 'package:ent5m/views/LostAndFound/ClosedLostAndFound.dart';
 import 'package:ent5m/views/LostAndFound/OpenLostAndFound.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LostAndFoundPage extends StatelessWidget {
   const LostAndFoundPage({super.key});
@@ -13,7 +15,9 @@ class LostAndFoundPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('LOST AND FOUND'),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+            IconButton(onPressed: () {
+              Get.to(()=>AddLostAndFound(), transition: Transition.downToUp);
+            }, icon: const Icon(Icons.add)),
           ],
           bottom: const TabBar(
             unselectedLabelColor: Colors.white,

@@ -21,31 +21,32 @@ class Reservations extends StatelessWidget {
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(60),
             child: ListTile(
-              contentPadding: const EdgeInsets.only(left: 10),
-              title: ResponsiveMaxWidthContainer(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    prefix: IconButton(
-                        onPressed: () {
-                          fleetController.resSearchResults.clear();
-                          fleetController.resNumController.clear();
-                        },
-                        icon: const Icon(
-                          Icons.clear,
-                          color: Colors.red,
-                        )),
-                    suffix: IconButton(
-                        onPressed: () {
-                          fleetController.searchRes();
-                        },
-                        icon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        )),
-                  ),
-                  style: TextStyle(color: Colors.grey.shade100),
-                  controller: fleetController.resNumController,
+              visualDensity: VisualDensity.compact,
+              contentPadding: EdgeInsets.zero,
+              title: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  hintStyle: const TextStyle(color: Colors.white),
+                  prefix: IconButton(
+                      onPressed: () {
+                        fleetController.resSearchResults.clear();
+                        fleetController.resNumController.clear();
+                      },
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.red,
+                      )),
+                  suffix: IconButton(
+                      onPressed: () {
+                        fleetController.searchRes();
+                      },
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.grey,
+                      )),
                 ),
+                style: TextStyle(color: Colors.grey.shade100),
+                controller: fleetController.resNumController,
               ),
             ),
           ),

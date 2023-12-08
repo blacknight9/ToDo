@@ -3,8 +3,10 @@ import 'package:ent5m/constants/Colors.dart';
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:ent5m/views/FleetPage/AddResPage.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/ResModel.dart';
@@ -20,7 +22,9 @@ class ResView extends StatelessWidget {
       appBar: AppBar(
         title: Text(resModel.eventName),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.edit,color: Colors.yellow,))
+          IconButton(onPressed: (){
+            Get.to(()=>AddReservationView(isEdit: true,resModel: resModel,),transition: Transition.downToUp);
+          }, icon: const Icon(Icons.edit,color: Colors.yellow,))
         ],
       ),
       body: ResponsiveMaxWidthContainer(

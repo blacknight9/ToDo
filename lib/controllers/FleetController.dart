@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:ent5m/views/FleetPage/Reservations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -200,12 +201,13 @@ class FleetController extends GetxController {
     noteController.clear();
   }
 
-  Future<void> addRes(GlobalKey<FormState> key) async {
+  Future<void> addRes({required GlobalKey<FormState> key, ResModel? resModel, required bool isEdit}) async {
     String? resNumber = getRandomId2(8);
     if(key.currentState!.validate() && fromDate.value !=null && toDate.value != null && timeOfPickup.value != null) {
       try{
 
-        resNumber != null ?
+        isEdit == false ?
+
         await CollectionRef.path(path: 'reservations').doc(resNumber).set(
             ResModel(
               resNumber: resNumber,
@@ -224,9 +226,30 @@ class FleetController extends GetxController {
               timeOfPickup: timeOfPickup.value!,
               phoneNumber: phoneController.text ,
             ).toJson()
-        ) : Fluttertoast.showToast(msg: 'Res Num is empty');
+        )  :
+        await CollectionRef.path(path: 'reservations').doc(resModel!.resNumber).update(
+            ResModel(
+              resNumber: resModel.resNumber,
+              eventName: eventNameController.text,
+              from: fromDate.value!,
+              to: toDate.value!,
+              background: currentColor.value,
+              isAllDay:  true,
+              unit: selectedVan.value != null ? selectedVan.value!.unitNumber : unitController.text,
+              size: selectedVan.value != null ? selectedVan.value!.seats : sizeController.text,
+              note: noteController.text,
+              uid: currentUser,
+              timeStamp: DateTime.now().toUtc(),
+              staffId: currentUserData.first.eid,
+              staffName: currentUserData.first.name,
+              timeOfPickup: timeOfPickup.value!,
+              phoneNumber: phoneController.text ,
+            ).toJson()
+        );
+
+
         clearResForm();
-        Get.back();
+        isEdit == false ?Get.back() : Get.off(()=> const Reservations());
       } catch (e) {
         print(e);
       }

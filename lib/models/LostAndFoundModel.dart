@@ -2,6 +2,7 @@
 //
 //     final lostAndFoundModel = lostAndFoundModelFromJson(jsonString);
 
+import 'package:ent5m/constants/appConstants.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -15,19 +16,21 @@ class LostAndFoundModel {
   final String foundBy;
   final String uid;
   final String eid;
+  final String unit;
   final DateTime timeStamp;
   final DateTime dateFound;
-  final String isPickedUp;
+  final bool isClosed;
 
   LostAndFoundModel({
     required this.description,
     required this.locationFound,
     required this.foundBy,
     required this.uid,
+    required this.unit,
     required this.eid,
     required this.timeStamp,
     required this.dateFound,
-    required this.isPickedUp,
+    required this.isClosed,
   });
 
   factory LostAndFoundModel.fromJson(Map<String, dynamic> json) => LostAndFoundModel(
@@ -35,10 +38,11 @@ class LostAndFoundModel {
     locationFound: json["locationFound"],
     foundBy: json["foundBy"],
     uid: json["uid"],
+    unit: json["unit"],
     eid: json["eid"],
-    timeStamp: json["timeStamp"],
-    dateFound: json["dateFound"],
-    isPickedUp: json["isPickedUp"],
+    timeStamp: convertTimestampToDateTime(json["timeStamp"]),
+    dateFound: convertTimestampToDateTime(json["dateFound"]),
+    isClosed: json["isClosed"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -47,8 +51,9 @@ class LostAndFoundModel {
     "foundBy": foundBy,
     "uid": uid,
     "eid": eid,
+    "unit": unit,
     "timeStamp": timeStamp,
     "dateFound": dateFound,
-    "isPickedUp": isPickedUp,
+    "isClosed": isClosed,
   };
 }

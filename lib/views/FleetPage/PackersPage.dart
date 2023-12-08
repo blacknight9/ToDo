@@ -16,6 +16,14 @@ class PackersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    List<CalendarResource> resourceColl = <CalendarResource>[];
+    resourceColl.add(CalendarResource(
+      displayName: 'John',
+      id: '0001',
+      color: Colors.red,
+    ));
+
     final fleetController = Get.put(FleetController());
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +49,7 @@ class PackersPage extends StatelessWidget {
           }, icon: const Icon(Icons.list)),
           IconButton(
               onPressed: () {
-                Get.to(()=>  AddReservationView());
+                Get.to(()=>  AddReservationView(isEdit: false,));
                 // fleetController.addPacker(unitNumber: '7vr624');
               },
               icon: Icon(
@@ -54,6 +62,7 @@ class PackersPage extends StatelessWidget {
       body: GetBuilder<FleetController>(
         builder: (FleetController fleetController) =>
             SfCalendar(
+
               onTap: (CalendarTapDetails details){
                 if (details.targetElement == CalendarElement.appointment) {
                   Get.to(()=>ResView(resModel: details.appointments!.first as ResModel),transition: Transition.downToUp);
@@ -61,7 +70,7 @@ class PackersPage extends StatelessWidget {
               },
               onLongPress: (calenderTapDetails) {
 
-                  Get.to(()=> AddReservationView(from: calenderTapDetails.date,),transition: Transition.downToUp);
+                  Get.to(()=> AddReservationView(from: calenderTapDetails.date,isEdit: false,),transition: Transition.downToUp);
 
 
 
@@ -83,6 +92,8 @@ class PackersPage extends StatelessWidget {
     );
   }
 }
+
+
 
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<ResModel> source) {

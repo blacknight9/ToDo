@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/models/AddVanModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:ent5m/views/FleetPage/AddPcakerPage.dart';
+import 'package:ent5m/views/FleetPage/SpecificVanRes.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class PackersListPage extends StatelessWidget {
               onPressed: () {},
               icon: IconButton(
                   onPressed: () => Get.to(() => AddPackerPage()),
-                  icon: Icon(Icons.add)))
+                  icon: const Icon(Icons.add)))
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -41,6 +42,9 @@ class PackersListPage extends StatelessWidget {
                     child: Column(
                       children: [
                         ListTile(
+                          onTap: (){
+                            Get.to(()=>SpecificVanRes(addVanModel : addVanModel),transition: Transition.downToUp);
+                          },
                           leading: CircleAvatar(
                             backgroundColor: addVanModel.seats == '12' ? Colors.blue : Colors.green,
                             child: Center(child: Text(addVanModel.seats,style: const TextStyle(fontWeight: FontWeight.bold),)),
