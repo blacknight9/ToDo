@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ent5m/constants/appConstants.dart';
-import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/NotesModel.dart';
 import 'package:ent5m/models/StaffModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,6 +47,15 @@ class HomeController extends GetxController {
         .collection('notes')
         .orderBy('timeStamp', descending: true)
         .snapshots();
+  }
+
+  void deleteNote({required String path, required String docId}) async{
+    try{
+      await CollectionRef.path(path: path ).doc(docId).delete();
+    } catch(e) {
+      print(e);
+    }
+
   }
   
   getCurrentUserData () {
@@ -108,6 +117,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> addNote() async {
+    String docId = getRandomId2(16);
     try {
       CollectionReference notes =
           FirebaseFirestore.instance.collection('notes');
@@ -133,14 +143,16 @@ class HomeController extends GetxController {
           }
 
           // Add the new note
-          await notes.add(HomePanelModel(
+          await notes.doc(docId).set(NotesModel(
                   title: title.value,
                   message: message.value,
                   isPinned: isPinned.value,
                   timeStamp: DateTime.now().toUtc(),
+                  staffId: currentUserData.first.eid,
                   dp: '',
                   type: 'note',
-                  userName: currentUserData.first.name)
+                  userName: currentUserData.first.name,
+              docId: docId)
               .toJson());
 
           // Reset fields after saving

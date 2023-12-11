@@ -1,3 +1,5 @@
+
+
 import 'package:ent5m/views/FleetPage/PackersPage.dart';
 import 'package:ent5m/views/GasPage/GasPage.dart';
 import 'package:ent5m/views/Home/NotesPage.dart';
@@ -15,27 +17,37 @@ import 'TileModel.dart';
 
 List homeList = [
   TileModel(
-      icon: Icons.car_rental,
-      title: 'VANS',
-      onTap: () async {
+    icon: Icons.car_rental,
+    title: 'VANS',
+
+    onTap: () {
+
+      Get.back();
         Get.to(() => const PackersPage(), transition: Transition.downToUp);
-      }),
+    },
+  ),
   TileModel(
       icon: Icons.people_alt,
       title: 'STAFF',
       onTap: () async {
+        Get.back();
+
         Get.to(() => StaffPage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.list_alt_rounded,
       title: 'SHOPS LIST',
       onTap: () async {
+        Get.back();
+
         Get.to(() => const ShopsPage(), transition: Transition.downToUp);
       }),
   TileModel(
       icon: Icons.contact_phone,
       title: 'CONTACTS',
       onTap: () async {
+        Get.back();
+
         Get.to(() => const ContactsPage(), transition: Transition.downToUp);
       }),
   TileModel(
@@ -44,6 +56,8 @@ List homeList = [
 
       // });
       onTap: () {
+        Get.back();
+
         Get.to(() => const PickedUpCarsPage(), transition: Transition.downToUp);
       }),
   TileModel(
@@ -52,6 +66,8 @@ List homeList = [
 
       // });
       onTap: () {
+        Get.back();
+
         Get.to(() => const ResalePage(), transition: Transition.downToUp);
       }),
   TileModel(
@@ -68,16 +84,18 @@ List homeList = [
 
       // });
       onTap: () {
+        Get.back();
+
         Get.to(() => const GasPage(), transition: Transition.downToUp);
       }),
-
   TileModel(
       icon: Icons.help_center_outlined,
       title: 'LOST & FOUND',
 
       // });
       onTap: () {
+        Get.back();
+
         Get.to(() => const LostAndFoundPage(), transition: Transition.downToUp);
       }),
-
 ];

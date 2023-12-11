@@ -16,7 +16,7 @@ class SignUpLoginController extends GetxController {
   TextEditingController veriPassword = TextEditingController();
 
 
-  Future<void> verifyPassword({required VoidCallback addNoteFn}) async {
+    verifyPassword({required VoidCallback fn}) async {
       try {
         User? user = FirebaseAuth.instance.currentUser;
         String email = user!.email!;  // Handle the case when email might be null
@@ -31,9 +31,10 @@ class SignUpLoginController extends GetxController {
         // For example, navigate to AddNotePage or the home screen
         // Navigator.of(context).pop(); // You might need to pass the context or use Get.back() if using GetX
           // Your logic for adding a note
-          addNoteFn();
-
-        Get.offAllNamed('/'); // Navigate to home after the action
+          fn();
+          veriPassword.clear();
+        Get.back();
+          // Navigate to home after the action
       } on FirebaseAuthException catch (e) {
         print(e);
         if (e.code == 'wrong-password') {
@@ -99,7 +100,7 @@ class SignUpLoginController extends GetxController {
   Future<void> login() async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email.text, password: password.text);
+          .signInWithEmailAndPassword(email: email.text.removeAllWhitespace, password: password.text.removeAllWhitespace);
       Get.offAllNamed('/home'); // Navigate to home page after successful login
     } on FirebaseAuthException catch (e) {
       String errorMessage = _getFirebaseAuthErrorMessage(e);
@@ -118,8 +119,8 @@ class SignUpLoginController extends GetxController {
       try {
         UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
+          email: email.text.removeAllWhitespace,
+          password: password.text.removeAllWhitespace,
         );
         _createNewStaff(userCredential.user);
         return userCredential;

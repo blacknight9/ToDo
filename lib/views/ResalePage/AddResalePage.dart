@@ -57,7 +57,4 @@ class AddResale extends StatelessWidget {
     );
   }
 
-  Future<void> submitShopDetails() async {
-    // Implement the logic here
-  }
 }

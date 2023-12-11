@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -27,6 +28,25 @@ Future<void> makePhoneCall(String phoneNumber) async {
     await launchUrl(telUrl);
   } else {
     throw 'Could not launch the phone dialer.';
+  }
+}
+String formatNumber(dynamic number) {
+  final formatter = NumberFormat('#,##0', 'en_US');
+  return formatter.format(number);
+}
+
+String formatCurrency(String amountString, {String locale = 'en_US', String currencySymbol = '\$'}) {
+  try {
+    // Attempt to parse the string to a double
+    double amount = double.parse(amountString);
+
+    // Format the number as currency
+    final formatter = NumberFormat.currency(locale: locale, symbol: currencySymbol);
+    return formatter.format(amount);
+  } catch (e) {
+    // If parsing fails, return the original string or handle the error as needed
+    print('Error formatting currency: $e');
+    return amountString;
   }
 }
 

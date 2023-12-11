@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -45,6 +44,7 @@ class _PasswordVerificationState extends State<PasswordVerification> {
     HomeController homeController = Get.put(HomeController());
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('ENTER YOUR PASSWORD'),),
       body: Form(
         key: _formKey,
@@ -78,9 +78,10 @@ class _PasswordVerificationState extends State<PasswordVerification> {
               const SizedBox(height: 20,),
               TextButton(
                 child: const Text('Submit'),
-                onPressed: () async {
-                  widget.onPressed();
-                  // signUpLoginController.verifyPassword(formKey: _formKey, addNoteFn: homeController.addNote );
+                onPressed: () {
+
+                 signUpLoginController.verifyPassword(fn:widget.onPressed );
+
                 },
               ),
 

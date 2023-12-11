@@ -1,22 +1,23 @@
 // To parse this JSON data, do
 //
-//     final homePanelModel = homePanelModelFromJson(jsonString);
+//     final NotesModel = NotesModelFromJson(jsonString);
 
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-HomePanelModel homePanelModelFromJson(String str) => HomePanelModel.fromJson(json.decode(str));
+NotesModel NotesModelFromJson(String str) => NotesModel.fromJson(json.decode(str));
 
-String homePanelModelToJson(HomePanelModel data) => json.encode(data.toJson());
+String NotesModelToJson(NotesModel data) => json.encode(data.toJson());
 
-class HomePanelModel {
+class NotesModel {
   final String? title;
   final String? message;
   final bool isPinned;
   final DateTime timeStamp;
   final String? dp;
   final String type;
+  final String docId;
   final String? userName;
   final String? name;
   final String? desc;
@@ -29,7 +30,8 @@ class HomePanelModel {
   final String? staffId;
   final String? mileage;
 
-  HomePanelModel({
+  NotesModel({
+    required this.docId,
     this.plates,
     this.mileage,
     this.staffId,
@@ -49,8 +51,9 @@ class HomePanelModel {
     this.name
   });
 
-  factory HomePanelModel.fromJson(Map<String, dynamic> json) => HomePanelModel(
+  factory NotesModel.fromJson(Map<String, dynamic> json) => NotesModel(
     desc: json["desc"],
+    docId: json["docId"],
     mileage: json["mileage"],
     staffId: json["staffId"],
     cost: json["cost"],
@@ -71,6 +74,7 @@ class HomePanelModel {
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "docId": docId,
     "mileage": mileage,
     "staffId": staffId,
     "cost": cost,

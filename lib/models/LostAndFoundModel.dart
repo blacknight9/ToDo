@@ -17,7 +17,10 @@ class LostAndFoundModel {
   final String uid;
   final String eid;
   final String unit;
+  final String tagId;
+  final String closedById;
   final DateTime timeStamp;
+  final DateTime? closeTimeStamp;
   final DateTime dateFound;
   final bool isClosed;
 
@@ -26,10 +29,13 @@ class LostAndFoundModel {
     required this.locationFound,
     required this.foundBy,
     required this.uid,
+    required this.closedById,
+    this.closeTimeStamp,
     required this.unit,
     required this.eid,
     required this.timeStamp,
     required this.dateFound,
+    required this.tagId,
     required this.isClosed,
   });
 
@@ -37,10 +43,13 @@ class LostAndFoundModel {
     description: json["description"],
     locationFound: json["locationFound"],
     foundBy: json["foundBy"],
+    closedById: json["closedById"],
     uid: json["uid"],
     unit: json["unit"],
     eid: json["eid"],
+    tagId: json["tagId"],
     timeStamp: convertTimestampToDateTime(json["timeStamp"]),
+    closeTimeStamp: convertTimestampToDateTime(json["closeTimeStamp"]),
     dateFound: convertTimestampToDateTime(json["dateFound"]),
     isClosed: json["isClosed"],
   );
@@ -50,10 +59,13 @@ class LostAndFoundModel {
     "locationFound": locationFound,
     "foundBy": foundBy,
     "uid": uid,
+    "closedById": closedById,
     "eid": eid,
     "unit": unit,
+    "tagId": tagId,
     "timeStamp": timeStamp,
     "dateFound": dateFound,
+    "closeTimeStamp": closeTimeStamp,
     "isClosed": isClosed,
   };
 }

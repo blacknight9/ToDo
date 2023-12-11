@@ -1,7 +1,6 @@
-import 'dart:developer';
 
-import 'package:ent5m/constants/Colors.dart';
 import 'package:ent5m/constants/appConstants.dart';
+import 'package:ent5m/controllers/SignUpLoginController.dart';
 import 'package:ent5m/models/ResModel.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:ent5m/controllers/FleetController.dart';
 
 import '../../models/AddVanModel.dart';
+import '../Widgets/PasswordVerification.dart';
 
 class AddReservationView extends StatefulWidget {
   ResModel? resModel;
@@ -51,6 +51,7 @@ class _AddReservationViewState extends State<AddReservationView> {
 
   @override
   Widget build(BuildContext context) {
+    SignUpLoginController signUpLoginController = Get.put(SignUpLoginController());
     return Scaffold(
       appBar: AppBar(
         title: widget.isEdit == false ? const Text('Add Reservation') : const Text('Update Reservation'),
@@ -289,7 +290,14 @@ class _AddReservationViewState extends State<AddReservationView> {
                         child: ElevatedButton(
                           child: widget.isEdit == false ? const Text('Save Reservation') : const Text('Update Reservation'),
                           onPressed: () {
-                            fleetController.addRes(key: _formKey, isEdit: widget.isEdit, resModel: widget.resModel);
+                            Get.bottomSheet(
+                                PasswordVerification(
+                                  onPressed: ()  {
+                              signUpLoginController.verifyPassword(
+                                  fn: () async => await fleetController.addRes(key: _formKey, isEdit: widget.isEdit, resModel: widget.resModel));
+
+                            },));
+
                           },
                         ),
                       ),

@@ -11,20 +11,19 @@ import 'PackersListPage.dart';
 
 
 
-class PackersPage extends StatelessWidget {
+
+
+class PackersPage extends StatefulWidget {
   const PackersPage({super.key});
 
   @override
+  State<PackersPage> createState() => _PackersPageState();
+}
+
+class _PackersPageState extends State<PackersPage> {
+  @override
   Widget build(BuildContext context) {
 
-    List<CalendarResource> resourceColl = <CalendarResource>[];
-    resourceColl.add(CalendarResource(
-      displayName: 'John',
-      id: '0001',
-      color: Colors.red,
-    ));
-
-    final fleetController = Get.put(FleetController());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -60,6 +59,7 @@ class PackersPage extends StatelessWidget {
         ],
       ),
       body: GetBuilder<FleetController>(
+        init: FleetController(),
         builder: (FleetController fleetController) =>
             SfCalendar(
 

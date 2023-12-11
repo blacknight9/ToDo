@@ -4,11 +4,15 @@ import 'package:ent5m/views/LostAndFound/OpenLostAndFound.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/LostAndFoundController.dart';
+
 class LostAndFoundPage extends StatelessWidget {
   const LostAndFoundPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final LostAndFoundController lostAndFoundController =
+    Get.put(LostAndFoundController());
     return DefaultTabController(
       length: 2, // The number of tabs
       child: Scaffold(
@@ -16,7 +20,7 @@ class LostAndFoundPage extends StatelessWidget {
           title: const Text('LOST AND FOUND'),
           actions: [
             IconButton(onPressed: () {
-              Get.to(()=>AddLostAndFound(), transition: Transition.downToUp);
+              Get.to(()=>const AddLostAndFound(), transition: Transition.downToUp);
             }, icon: const Icon(Icons.add)),
           ],
           bottom: const TabBar(

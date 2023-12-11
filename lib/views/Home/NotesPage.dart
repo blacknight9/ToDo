@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ent5m/controllers/SignUpLoginController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/controllers/HomeController.dart';
-import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/NotesModel.dart';
 import 'package:ent5m/views/Home/AddNotePage.dart';
 import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 import 'package:ent5m/views/Widgets/MyExpansionTile.dart';
 
 import '../../constants/Colors.dart';
+import '../Widgets/PasswordVerification.dart';
 
 class NotesPage extends StatelessWidget {
   const NotesPage({super.key});
@@ -16,6 +18,7 @@ class NotesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
+    SignUpLoginController signUpLoginController = Get.put(SignUpLoginController());
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -73,9 +76,9 @@ class NotesPage extends StatelessWidget {
                 var data = combinedNotes[index];
 
 
-                HomePanelModel homePanelModel = HomePanelModel.fromJson(data.data() as Map<String, dynamic>);
+                NotesModel notesModel = NotesModel.fromJson(data.data() as Map<String, dynamic>);
                 return
-                  homePanelModel.type == 'contact' ?
+                  notesModel.type == 'contact' ?
                       Padding(
                         padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
                         child: Material(
@@ -86,19 +89,61 @@ class NotesPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15)
                             ),
                             child: ListTile(
+                              onLongPress: () async {
+                                if (homeController.currentUserData.first.eid ==
+                                    notesModel.staffId || homeController.currentUserData.first.type == 'admin') {
+                                  await Get.defaultDialog(
+                                    backgroundColor: myAppBar,
+                                    titleStyle: TextStyle(color: Colors.grey.shade100),
+                                    title: 'Delete Note?',
+                                    content: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () async {
+                                              await Get.bottomSheet(PasswordVerification(
+                                                  onPressed: () async=>
+                                                      signUpLoginController.verifyPassword(
+                                                          fn: () async {
+                                                            homeController.deleteNote(
+                                                                path: 'notes', docId: notesModel.docId);
+                                                          })));
+                                            },
+                                            icon: const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                              size: 40,
+                                            )),
+                                        IconButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            icon: const Icon(
+                                              Icons.cancel,
+                                              color: Colors.red,
+                                              size: 40,
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                                  print('its you');
+                                } else {
+                                  print('someone else');
+                                }
+                              },
                               textColor: Colors.grey.shade100,
                               contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
                               leading:  const Icon(Icons.call,color: Colors.orange,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               tileColor: Colors.blueGrey,
-                              title: Text(homePanelModel.name!),
-                              subtitle: Text(homePanelModel.desc!),
-                              trailing: TextButton(onPressed: ()=>makePhoneCall(homePanelModel.phoneNumber!), child: Text(formatPhoneNumber(homePanelModel.phoneNumber!),style: TextStyle(color: Colors.grey.shade100),)),
+                              title: Text(notesModel.name!),
+                              subtitle: Text(notesModel.desc!),
+                              trailing: TextButton(onPressed: ()=>makePhoneCall(notesModel.phoneNumber!), child: Text(formatPhoneNumber(notesModel.phoneNumber!),style: TextStyle(color: Colors.grey.shade100),)),
                             ),
                           ),
                         ),
                       ) :
-                  homePanelModel.type == 'resale' ?
+                  notesModel.type == 'resale' ?
                   Padding(
                     padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
                     child: Material(
@@ -109,31 +154,73 @@ class NotesPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15)
                         ),
                         child: ListTile(
+                          onLongPress: () async {
+                            if (homeController.currentUserData.first.eid ==
+                                notesModel.staffId || homeController.currentUserData.first.type == 'admin') {
+                              await Get.defaultDialog(
+                                backgroundColor: myAppBar,
+                                titleStyle: TextStyle(color: Colors.grey.shade100),
+                                title: 'Delete Note?',
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () async {
+                                          await Get.bottomSheet(PasswordVerification(
+                                              onPressed: () async=>
+                                                  signUpLoginController.verifyPassword(
+                                                      fn: () async {
+                                                        homeController.deleteNote(
+                                                            path: 'notes', docId: notesModel.docId);
+                                                      })));
+                                        },
+                                        icon: const Icon(
+                                          Icons.check_circle,
+                                          color: Colors.green,
+                                          size: 40,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.red,
+                                          size: 40,
+                                        )),
+                                  ],
+                                ),
+                              );
+                              print('its you');
+                            } else {
+                              print('someone else');
+                            }
+                          },
                           contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                          leading: const Icon(Icons.money,color: Colors.green,),
+                          leading:  Icon(Icons.money,color: Colors.green.shade900,),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                          tileColor: Colors.yellow.shade200,
-                          title: Text('(${homePanelModel.type.toUpperCase()}) ${homePanelModel.carDesc!.toUpperCase()}'),
+                          tileColor: Colors.grey.shade500,
+                          title: Text('(${notesModel.type.toUpperCase()}) ${notesModel.carDesc!.toUpperCase()}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              homePanelModel.unit!.isEmpty ?
+                              notesModel.unit!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('UNIT: ${homePanelModel.unit!.toUpperCase()}'),
-                              homePanelModel.vin!.isEmpty ?
+                              Text('UNIT: ${notesModel.unit!.toUpperCase()}'),
+                              notesModel.vin!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('VIN: ${homePanelModel.vin!.toUpperCase()}'),
-                              homePanelModel.plates!.isEmpty ?
+                              Text('VIN: ${notesModel.vin!.toUpperCase()}'),
+                              notesModel.plates!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('PLATES: ${homePanelModel.plates!.toUpperCase()}'),
+                              Text('PLATES: ${notesModel.plates!.toUpperCase()}'),
                             ],
                           ),
-                          trailing: Text(format3.format(homePanelModel.timeStamp).toUpperCase()),
+                          trailing: Text(format3.format(notesModel.timeStamp).toUpperCase()),
                         ),
                       ),
                     ),
                   ) :
-                  homePanelModel.type == 'gas' ?
+                  notesModel.type == 'gas' ?
                   Padding(
                     padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
                     child: Material(
@@ -144,34 +231,76 @@ class NotesPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15)
                         ),
                         child: ListTile(
+                            onLongPress: () async {
+                              if (homeController.currentUserData.first.eid ==
+                                  notesModel.staffId || homeController.currentUserData.first.type == 'admin') {
+                                await Get.defaultDialog(
+                                  backgroundColor: myAppBar,
+                                  titleStyle: TextStyle(color: Colors.grey.shade100),
+                                  title: 'Delete Note?',
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await Get.bottomSheet(PasswordVerification(
+                                                onPressed: () async=>
+                                                    signUpLoginController.verifyPassword(
+                                                        fn: () async {
+                                                          homeController.deleteNote(
+                                                              path: 'notes', docId: notesModel.docId);
+                                                        })));
+                                          },
+                                          icon: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                            size: 40,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          icon: const Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                            size: 40,
+                                          )),
+                                    ],
+                                  ),
+                                );
+                                print('its you');
+                              } else {
+                                print('someone else');
+                              }
+                            },
                           textColor: Colors.grey.shade100,
                           contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
                             visualDensity: VisualDensity.adaptivePlatformDensity,
                             leading: const Icon(Icons.local_gas_station,color: Colors.green,),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           tileColor: Colors.grey.shade800,
-                          title: Text(homePanelModel.userName!),
+                          title: Text(notesModel.userName!),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Mi: ${homePanelModel.mileage}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
-                              homePanelModel.unit!.isEmpty ?
+                              Text('Mi: ${formatNumber(int.parse(notesModel.mileage!))}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                              notesModel.unit!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('UNIT: ${homePanelModel.unit}'),
-                              homePanelModel.vin!.isEmpty ?
+                              Text('UNIT: ${notesModel.unit}'),
+                              notesModel.vin!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('VIN: ${homePanelModel.vin}'),
-                              homePanelModel.plates!.isEmpty ?
+                              Text('VIN: ${notesModel.vin}'),
+                              notesModel.plates!.isEmpty ?
                               const SizedBox.shrink() :
-                              Text('PLATES: ${homePanelModel.plates}'),
+                              Text('PLATES: ${notesModel.plates}'),
                             ],
                           ),
                           trailing: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('\$${homePanelModel.cost}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
-                              Text(format3.format(homePanelModel.timeStamp,),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+                              Text('\$${notesModel.cost}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                              Text(format3.format(notesModel.timeStamp,),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                             ],
                           )
                         ),
@@ -179,7 +308,7 @@ class NotesPage extends StatelessWidget {
                     ),
                   ) :
 
-                  MyExpansionTile(homePanelModel: homePanelModel, staffModel:  homeController.currentUserData.first,);
+                  MyExpansionTile(notesModel: notesModel, staffModel:  homeController.currentUserData.first,);
               },
             ),
           );
@@ -193,7 +322,7 @@ class NotesPage extends StatelessWidget {
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:ent5m/constants/appConstants.dart';
 // import 'package:ent5m/controllers/HomeController.dart';
-// import 'package:ent5m/models/HomePanelModel.dart';
+// import 'package:ent5m/models/NotesModel.dart';
 // import 'package:ent5m/views/Home/AddNotePage.dart';
 // import 'package:ent5m/views/ResponsiveMaxWidthContainer.dart';
 // import 'package:ent5m/views/Widgets/MyExpansionTile.dart';
@@ -250,12 +379,12 @@ class NotesPage extends StatelessWidget {
 //                   var data = snapshot.data!.docs[index];
 //                   print(data);
 //
-//                   HomePanelModel homePanelModel = HomePanelModel.fromJson(
+//                   NotesModel NotesModel = NotesModel.fromJson(
 //                       data.data() as Map<String, dynamic>);
 //                   return Column(
 //                     children: [
 //
-//                       MyExpansionTile(homePanelModel: homePanelModel),
+//                       MyExpansionTile(NotesModel: NotesModel),
 //                     ],
 //                   );
 //                 }),

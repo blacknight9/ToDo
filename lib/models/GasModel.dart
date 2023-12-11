@@ -19,9 +19,11 @@ class GasModel {
   final String unit;
   final DateTime timeStamp;
   final String mileage;
+  final String docId;
 
   GasModel({
     required this.staffName,
+    required this.docId,
     required this.cost,
     required this.vin,
     required this.plates,
@@ -33,6 +35,7 @@ class GasModel {
 
   factory GasModel.fromJson(Map<String, dynamic> json) => GasModel(
     staffName: json["staffName"],
+    docId: json["docId"],
     staffId: json["staffId"],
     cost: json["cost"],
     vin: json["vin"],
@@ -44,6 +47,7 @@ class GasModel {
 
   Map<String, dynamic> toJson() => {
     "staffName": staffName,
+    "docId": docId,
     "staffId": staffId,
     "cost": cost,
     "vin": vin,

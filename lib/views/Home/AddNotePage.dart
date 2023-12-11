@@ -1,5 +1,6 @@
 import 'package:ent5m/views/Widgets/PasswordVerification.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/HomeController.dart';
@@ -7,7 +8,9 @@ import '../../controllers/SignUpLoginController.dart';
 
 class AddNotePage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
-  SignUpLoginController signUpLoginController = Get.put(SignUpLoginController());
+  final SignUpLoginController signUpLoginController = Get.put(SignUpLoginController());
+
+   AddNotePage({super.key});
 
 
   @override
@@ -46,10 +49,18 @@ class AddNotePage extends StatelessWidget {
               )),
               ElevatedButton(
                 onPressed: () {
-                  Get.bottomSheet(PasswordVerification(onPressed: () {
-                   signUpLoginController.verifyPassword(addNoteFn: homeController.addNote);
+                  if(homeController.title.isNotEmpty && homeController.message.isNotEmpty) {
+                    Get.bottomSheet(PasswordVerification(onPressed: () async {
+                      signUpLoginController.verifyPassword(fn: homeController.addNote);
 
-                  },));
+                    }
+
+                    ,));
+                  }else {
+                    Fluttertoast.showToast(msg: 'Fill up fields',timeInSecForIosWeb: 3);
+
+                  }
+
                   // homeController.addNote(context);
                 },
                 child: const Text('Save Note'),

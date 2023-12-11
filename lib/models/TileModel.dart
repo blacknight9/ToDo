@@ -5,5 +5,5 @@ class TileModel {
   final String title;
   final VoidCallback onTap;
 
-  TileModel({required this.icon, required this.title, required this.onTap});
+  TileModel({ required this.icon, required this.title, required this.onTap});
 }

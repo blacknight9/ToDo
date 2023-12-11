@@ -29,7 +29,7 @@ class GasPage extends StatelessWidget {
       body: ResponsiveMaxWidthContainer(
         maxWidthPercentage: 0.6,
         child: StreamBuilder<QuerySnapshot>(
-            stream: CollectionRef.path(path: 'gas').snapshots(),
+            stream: CollectionRef.path(path: 'gas').orderBy('timeStamp',descending: true).snapshots(),
             builder: (context, snapshot){
               if(snapshot.hasError) {
                 print(snapshot.error);
@@ -53,7 +53,7 @@ class GasPage extends StatelessWidget {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Mi: ${gasModel.mileage}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                                Text('Mi: ${formatNumber(int.parse(gasModel.mileage))}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
                                 gasModel.unit.isEmpty ?
                                 const SizedBox.shrink() :
                                 Text('UNIT: ${gasModel.unit}'),
@@ -69,7 +69,7 @@ class GasPage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('\$${gasModel.cost}',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
+                                Text(formatCurrency(gasModel.cost),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14)),
                                 Text(format3.format(gasModel.timeStamp,),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                               ],
                             )

@@ -1,6 +1,6 @@
 import 'package:ent5m/constants/appConstants.dart';
 import 'package:ent5m/models/GasModel.dart';
-import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/NotesModel.dart';
 import 'package:ent5m/models/ResaleModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,26 +22,28 @@ class GasController extends GetxController {
     plates.clear();
   }
 
-  addGas() async {
+  addGas({required String staffName, required String staffId}) async {
+    String docId = getRandomId2(16);
     if (mileage.text.isNotEmpty && cost.text.isNotEmpty  &&
         (unit.text.isNotEmpty || vin.text.isNotEmpty || plates.text.isNotEmpty))
     {
       try {
-        await CollectionRef.path(path: 'gas').add(
+        await CollectionRef.path(path: 'gas').doc(docId).set(
             GasModel(
                 vin: vin.text,
                 unit: unit.text,
                 plates: plates.text,
                 timeStamp: DateTime.now().toUtc(),
-                staffName: 'CurrentUserName',
+                staffName: staffName,
                 cost: cost.text,
                 mileage: mileage.text,
-                staffId: 'CurrentUser'
+                staffId: staffId,
+                docId: docId
             ).toJson()
         );
 
-        await CollectionRef.path(path: 'notes').add(
-            HomePanelModel(
+        await CollectionRef.path(path: 'notes').doc(docId).set(
+            NotesModel(
               timeStamp: DateTime.now().toUtc(),
               type: "gas",
               isPinned: false,
@@ -50,12 +52,11 @@ class GasController extends GetxController {
               plates: plates.text,
               cost: cost.text,
               mileage: mileage.text,
-              staffId: 'CurrentUser',
-              userName: 'staffName'
+              staffId: staffId,
+              userName: staffName, docId: docId
             ).toJson());
 
 
-        Get.back();
         Fluttertoast.showToast(msg: 'Gas receipt Added');
         clearForm();
       } catch (e) {

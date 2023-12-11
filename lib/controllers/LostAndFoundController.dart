@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:ent5m/models/LostAndFoundModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
+import 'package:ent5m/views/LostAndFound/ClosedLostAndFound.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../models/StaffModel.dart';
@@ -84,6 +86,9 @@ class LostAndFoundController extends GetxController {
               timeStamp: DateTime.now().toUtc(),
               dateFound: date.value!,
               isClosed: false,
+               closedById: '',
+              closeTimeStamp: null,
+           tagId: tagIdController.text,
             ).toJson());
         clearForm();
         Get.back();
@@ -92,4 +97,20 @@ class LostAndFoundController extends GetxController {
       }
     }
   }
+
+  void closeLAF(String tagId)async {
+  try {
+    await CollectionRef.path(path: 'LAF').doc(tagId).update({
+      'isClosed' : true,
+      'closeTimeStamp' : DateTime.now().toUtc(),
+      'closedById': currentUser,
+    });
+    Get.back();
+  }catch (e) {
+    Fluttertoast.showToast(msg: 'something went wrong');
+
+  }
+
+  }
+
 }

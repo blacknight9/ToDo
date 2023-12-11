@@ -17,6 +17,11 @@ class Reservations extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          leading:  IconButton(onPressed: (){
+            Get.back();
+            fleetController.resSearchResults.clear();
+            fleetController.resNumController.clear();
+          }, icon: const Icon(Icons.arrow_back_ios_new)),
           title: Text('Reservations'.toUpperCase()),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(60),
@@ -57,56 +62,64 @@ class Reservations extends StatelessWidget {
               Obx(
                 () => fleetController.resSearchResults.isEmpty
                     ? const SizedBox.shrink()
-                    : ListTile(
-                        tileColor: Colors.orange,
-                        onTap: () => Get.to(
-                            () => ResView(
-                                resModel:
-                                    fleetController.resSearchResults.first),
-                            transition: Transition.downToUp),
-                        leading: CircleAvatar(
-                          backgroundColor:
-                              fleetController.resSearchResults.first.size ==
-                                      '12'
-                                  ? Colors.blue
-                                  : Colors.green,
-                          child: Text(
-                            fleetController.resSearchResults.first.size,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ),
-                        title: Row(
-                          children: [
-                            Text(fleetController
-                                .resSearchResults.first.eventName),
-                            const SizedBox(
-                              width: 5,
+                    : Material(
+                  color: Colors.transparent,
+                      child: Ink(
+                        child: ListTile(
+                            tileColor: Colors.orange.shade500,
+                            onTap: () {
+                              Get.to(
+                                      () => ResView(
+                                      resModel:
+                                      fleetController.resSearchResults.first),
+                                  transition: Transition.downToUp);
+
+                            } ,
+                            leading: CircleAvatar(
+                              backgroundColor:
+                                  fleetController.resSearchResults.first.size ==
+                                          '12'
+                                      ? Colors.blue
+                                      : Colors.green,
+                              child: Text(
+                                fleetController.resSearchResults.first.size,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
                             ),
-                            Text(
-                                '(DAYS: ${fleetController.resSearchResults.first.to.difference(fleetController.resSearchResults.first.from).inDays.toString()})')
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                'RES#: ${fleetController.resSearchResults.first.resNumber}'),
-                            Text(
-                                '${format4.format(fleetController.resSearchResults.first.from)} - ${format4.format(fleetController.resSearchResults.first.to)}'),
-                          ],
-                        ),
-                        trailing: Text(
-                          fleetController.resSearchResults.first.unit,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
+                            title: Row(
+                              children: [
+                                Text(fleetController
+                                    .resSearchResults.first.eventName),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                    '(DAYS: ${fleetController.resSearchResults.first.to.difference(fleetController.resSearchResults.first.from).inDays.toString()})')
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    'RES#: ${fleetController.resSearchResults.first.resNumber}'),
+                                Text(
+                                    '${format4.format(fleetController.resSearchResults.first.from)} - ${format4.format(fleetController.resSearchResults.first.to)}'),
+                              ],
+                            ),
+                            trailing: Text(
+                              fleetController.resSearchResults.first.unit,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          ),
                       ),
+                    ),
               ),
               Expanded(
                 child: StreamBuilder(
                     stream:
-                        CollectionRef.path(path: 'reservations').snapshots(),
+                        CollectionRef.path(path: 'reservations').orderBy('from').snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         print(snapshot.error);

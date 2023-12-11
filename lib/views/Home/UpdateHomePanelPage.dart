@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/HomeController.dart';
@@ -46,26 +47,43 @@ class UpdateHomePanelPage extends StatelessWidget {
                 controller: homeController.csController,
                 decoration: const InputDecoration(labelText: 'COMPLETELY SATISFIED'),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextField(
                 controller: homeController.soController,
                 decoration: const InputDecoration(labelText: 'SHOUT-OUTS'),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextField(
                 controller: homeController.sqiController,
                 decoration: const InputDecoration(labelText: 'SQI'),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextField(
                 controller: homeController.hotAlertController,
                 decoration: const InputDecoration(labelText: 'HOT ALERT'),
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextField(
                 controller: homeController.addRevController,
                 decoration: const InputDecoration(labelText: 'AD-REV'),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+
+                ],
               ),
               // ... Other text fields with their respective controllers ...
 

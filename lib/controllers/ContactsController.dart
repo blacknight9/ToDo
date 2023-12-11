@@ -1,5 +1,5 @@
 import 'package:ent5m/constants/appConstants.dart';
-import 'package:ent5m/models/HomePanelModel.dart';
+import 'package:ent5m/models/NotesModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +17,7 @@ class ContactsController extends GetxController {
   }
 
   addContact() async {
+    String docId = getRandomId2(16);
     if (name.text.isNotEmpty &&
         phoneNumber.text.isNotEmpty &&
         desc.text.isNotEmpty) {
@@ -27,14 +28,15 @@ class ContactsController extends GetxController {
           "desc": desc.text,
         });
 
-        await CollectionRef.path(path: 'notes').add(
-            HomePanelModel(
+        await CollectionRef.path(path: 'notes').doc(docId).set(
+            NotesModel(
                 timeStamp: DateTime.now().toUtc(),
                 type: "contact",
                 name: name.text,
                 phoneNumber: formatPhoneNumber(phoneNumber.text),
                 desc: desc.text,
               isPinned: false,
+              docId: docId,
             ).toJson());
 
 

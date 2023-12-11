@@ -1,3 +1,4 @@
+import 'package:ent5m/models/TileModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,8 @@ class MenuPage extends StatelessWidget {
               gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: screenSize.width < 600 ? 2 : 3, crossAxisSpacing: 3, mainAxisSpacing: 3, mainAxisExtent: 75, childAspectRatio: 3 / 1),
               itemBuilder: (context, index) {
+
+                TileModel tileModel = TileModel(icon: homeList[index].icon, title: homeList[index].title, onTap: homeList[index].onTap);
                 return GridTile(
                   footer: Padding(
                     padding: const EdgeInsets.only(
@@ -46,8 +49,9 @@ class MenuPage extends StatelessWidget {
                   ),
                   child: MyGridTile(
                     // title: homeList[index].title,
-                      icon: homeList[index].icon,
-                      onTap: homeList[index].onTap),
+                      icon: tileModel.icon,
+                      onTap: tileModel.onTap,
+                  ),
                 );
               }),
         ),
