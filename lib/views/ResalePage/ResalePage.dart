@@ -22,7 +22,7 @@ class ResalePage extends StatelessWidget {
         title: const Text('RESALE LIST'),
         actions: [
           IconButton(onPressed: (){
-            Get.bottomSheet(AddResale());
+            Get.to(()=>AddResale(),transition: Transition.downToUp);
           }, icon: const Icon(Icons.add)),
           IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
         ],

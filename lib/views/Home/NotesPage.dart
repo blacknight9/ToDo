@@ -307,7 +307,73 @@ class NotesPage extends StatelessWidget {
                       ),
                     ),
                   ) :
+                  notesModel.type == 'laf' ?
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink(
 
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: ListTile(
+                            onLongPress: () async {
+                              if (homeController.currentUserData.first.eid ==
+                                  notesModel.staffId || homeController.currentUserData.first.type == 'admin') {
+                                await Get.defaultDialog(
+                                  backgroundColor: myAppBar,
+                                  titleStyle: TextStyle(color: Colors.grey.shade100),
+                                  title: 'Delete Note?',
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await Get.bottomSheet(PasswordVerification(
+                                                onPressed: () async=>
+                                                    signUpLoginController.verifyPassword(
+                                                        fn: () async {
+                                                          homeController.deleteNote(
+                                                              path: 'notes', docId: notesModel.docId);
+                                                        })));
+                                          },
+                                          icon: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                            size: 40,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          icon: const Icon(
+                                            Icons.cancel,
+                                            color: Colors.red,
+                                            size: 40,
+                                          )),
+                                    ],
+                                  ),
+                                );
+                                print('its you');
+                              } else {
+                                print('someone else');
+                              }
+                            },
+                            textColor: Colors.grey.shade100,
+                            contentPadding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                            visualDensity: VisualDensity.adaptivePlatformDensity,
+                            leading: Icon(Icons.question_mark,color: Colors.grey.shade100,),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            tileColor: Colors.teal.shade800,
+                            title: Text('${notesModel.name!} (L&F)',style: const TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text(notesModel.desc!),
+                            trailing: Text(format3.format(notesModel.timeStamp,),style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+
+                        ),
+                      ),
+                    ),
+                  ) :
                   MyExpansionTile(notesModel: notesModel, staffModel:  homeController.currentUserData.first,);
               },
             ),

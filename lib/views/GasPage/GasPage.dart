@@ -21,7 +21,7 @@ class GasPage extends StatelessWidget {
         title: const Text('GAS RECEIPTS'),
         actions: [
           IconButton(onPressed: (){
-            Get.bottomSheet(AddGasPage());
+            Get.to(()=>AddGasPage(),transition: Transition.downToUp);
           }, icon: const Icon(Icons.add)),
           IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
         ],

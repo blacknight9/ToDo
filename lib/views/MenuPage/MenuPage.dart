@@ -16,6 +16,7 @@ class MenuPage extends StatelessWidget {
     var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('MENU'),
         leading: IconButton(onPressed: ()=>Get.back(), icon: const Icon(Icons.close)),

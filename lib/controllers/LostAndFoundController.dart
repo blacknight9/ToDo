@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ent5m/models/LostAndFoundModel.dart';
+import 'package:ent5m/models/NotesModel.dart';
 import 'package:ent5m/services/firebase_services.dart';
 import 'package:ent5m/views/LostAndFound/ClosedLostAndFound.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -77,40 +78,50 @@ class LostAndFoundController extends GetxController {
         await CollectionRef.path(path: 'LAF')
             .doc(tagIdController.text)
             .set(LostAndFoundModel(
-              description: descriptionController.text,
-              locationFound: locationFoundController.text,
-              foundBy: foundByController.text,
-              unit: uniIdController.text,
-              uid: currentUser,
-              eid: currentUserData.first.eid,
+          description: descriptionController.text,
+          locationFound: locationFoundController.text,
+          foundBy: foundByController.text,
+          unit: uniIdController.text,
+          uid: currentUser,
+          eid: currentUserData.first.eid,
+          timeStamp: DateTime.now().toUtc(),
+          dateFound: date.value!,
+          isClosed: false,
+          closedById: '',
+          closeTimeStamp: null,
+          tagId: tagIdController.text,
+        ).toJson());
+
+        await CollectionRef.path(path: 'notes').doc(tagIdController.text).set(
+            NotesModel(
+              docId: tagIdController.text,
+              isPinned: false,
               timeStamp: DateTime.now().toUtc(),
-              dateFound: date.value!,
-              isClosed: false,
-               closedById: '',
-              closeTimeStamp: null,
-           tagId: tagIdController.text,
+              type: 'laf',
+              desc: descriptionController.text,
+              staffId: currentUserData.first.eid,
+              name: currentUserData.first.name,
+
             ).toJson());
-        clearForm();
-        Get.back();
-      } catch (e) {
-        print(e);
-      }
+
+    clearForm();
+    Get.back();
+    } catch (e) {
+    print(e);
     }
   }
-
-  void closeLAF(String tagId)async {
-  try {
-    await CollectionRef.path(path: 'LAF').doc(tagId).update({
-      'isClosed' : true,
-      'closeTimeStamp' : DateTime.now().toUtc(),
-      'closedById': currentUser,
-    });
-    Get.back();
-  }catch (e) {
-    Fluttertoast.showToast(msg: 'something went wrong');
-
   }
 
+  void closeLAF(String tagId) async {
+    try {
+      await CollectionRef.path(path: 'LAF').doc(tagId).update({
+        'isClosed': true,
+        'closeTimeStamp': DateTime.now().toUtc(),
+        'closedById': currentUser,
+      });
+      Get.back();
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'something went wrong');
+    }
   }
-
 }

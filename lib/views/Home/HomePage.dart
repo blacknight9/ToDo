@@ -22,11 +22,8 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           IconButton(onPressed: (){
-            Get.bottomSheet(
-
-                SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: AddNotePage()), isDismissible: false);
+            Get.to(()=>
+                AddNotePage(), transition: Transition.downToUp);
           }, icon: const Icon(Icons.note_add)),
           IconButton(onPressed: (){
             Get.bottomSheet(const MenuPage());

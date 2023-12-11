@@ -20,7 +20,7 @@ class ContactsPage extends StatelessWidget {
         title: const Text('CONTACTS LIST'),
         actions: [
           IconButton(onPressed: (){
-            Get.bottomSheet(AddContacts());
+            Get.to(()=>AddContacts(),transition: Transition.downToUp);
             }, icon: const Icon(Icons.add)),
           IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
         ],
