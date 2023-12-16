@@ -200,7 +200,7 @@ class NotesPage extends StatelessWidget {
                           leading:  Icon(Icons.money,color: Colors.green.shade900,),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           tileColor: Colors.grey.shade500,
-                          title: Text('(${notesModel.type.toUpperCase()}) ${notesModel.carDesc!.toUpperCase()}'),
+                          title: Text('${notesModel.carDesc!.toUpperCase()} (${notesModel.type.toUpperCase()})',style: const TextStyle(fontSize: 14),),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

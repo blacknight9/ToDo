@@ -17,35 +17,37 @@ class AddContacts extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Add Contact'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
 
-            const SizedBox(height: 20,),
-            TextField(
-              controller: contactsController.name,
-              decoration: const InputDecoration(labelText: 'Contact name'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller:  contactsController.desc,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller:  contactsController.phoneNumber,
-              decoration: const InputDecoration(labelText: 'Phone Number'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                // Implement the logic to pick the image, upload, and add the shop
-                contactsController.addContact();
-              },
-              child: const Text('Add Shop'),
-            ),
-          ],
+              const SizedBox(height: 20,),
+              TextField(
+                controller: contactsController.name,
+                decoration: const InputDecoration(labelText: 'Contact name'),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller:  contactsController.desc,
+                decoration: const InputDecoration(labelText: 'Description'),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller:  contactsController.phoneNumber,
+                decoration: const InputDecoration(labelText: 'Phone Number'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  // Implement the logic to pick the image, upload, and add the shop
+                  contactsController.addContact();
+                },
+                child: const Text('Add Shop'),
+              ),
+            ],
+          ),
         ),
       ),
     );

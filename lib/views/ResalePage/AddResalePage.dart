@@ -14,9 +14,8 @@ class AddResale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Add Contact'),
+        title: const Text('Add Resale'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
